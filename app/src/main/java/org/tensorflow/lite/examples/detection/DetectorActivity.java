@@ -16,6 +16,8 @@
 
 package org.tensorflow.lite.examples.detection;
 
+import static android.speech.tts.TextToSpeech.ERROR;
+
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -27,14 +29,16 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.Toast;
-
+import android.speech.tts.TextToSpeech;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
 import org.tensorflow.lite.examples.detection.customview.OverlayView.DrawCallback;
@@ -212,6 +216,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         });
     }
 
+    protected TextToSpeech tts;
     @Override
     protected void processImage() {
         ++timestamp;
@@ -236,6 +241,15 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         if (SAVE_PREVIEW_BITMAP) {
             ImageUtils.saveBitmap(croppedBitmap);
         }
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    tts.setLanguage(Locale.KOREAN);
+                }
+            }
+        });
 
         runInBackground(
                 new Runnable() {
@@ -274,6 +288,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
                                 result.setLocation(location);
                                 mappedRecognitions.add(result);
+                                tts.speak("얼룩이 감지되었습니다",TextToSpeech.QUEUE_FLUSH,null,null);
                             }
                         }
 

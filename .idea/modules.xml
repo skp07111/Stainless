@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tensorflow-lite/android.tensorflow-lite.iml" filepath="$PROJECT_DIR$/.idea/modules/tensorflow-lite/android.tensorflow-lite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Stainless.iml" filepath="$PROJECT_DIR$/.idea/modules/Stainless.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Stainless.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Stainless.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Stainless.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Stainless.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Stainless.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Stainless.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Stainless.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Stainless.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tensorflow-lite/Stainless.tensorflow-lite.iml" filepath="$PROJECT_DIR$/.idea/modules/tensorflow-lite/Stainless.tensorflow-lite.iml" />
     </modules>
   </component>
 </project>
