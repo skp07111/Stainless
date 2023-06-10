@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/activity_main.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/deviceview_row.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/listview_row.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/tfe_od_activity_camera.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/tfe_od_camera_connection_fragment_tracking.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/green/AndroidStudioProjects/Stainless/app/src/main/res/layout/tfe_od_layout_bottom_sheet.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/green/AndroidStudioProjects/yolov5/android/app/src/main/res/layout/activity_main.xml" value="0.24205128205128204" />
         <entry key="..\:/Users/green/AndroidStudioProjects/yolov5/android/app/src/main/res/layout/tfe_od_activity_camera.xml" value="0.24205128205128204" />
       </map>
