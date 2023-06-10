@@ -19,7 +19,7 @@ public class DetectorFactory {
         if (modelFilename.equals("yolov5s.tflite")) {
             labelFilename = "file:///android_asset/customclasses.txt";
             isQuantized = false;
-            inputSize = 416;
+            inputSize = 640;
             output_width = new int[]{80, 40, 20};
             masks = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
             anchors = new int[]{
@@ -29,7 +29,7 @@ public class DetectorFactory {
         else if (modelFilename.equals("best-fp16.tflite")) {
             labelFilename = "file:///android_asset/customclasses.txt";
             isQuantized = false;
-            inputSize = 416;
+            inputSize = 640;
             output_width = new int[]{40, 20, 10};
             masks = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
             anchors = new int[]{
@@ -39,7 +39,7 @@ public class DetectorFactory {
         else if (modelFilename.equals("yolov5s-int8.tflite")) {
             labelFilename = "file:///android_asset/customclasses.txt";
             isQuantized = true;
-            inputSize = 416;
+            inputSize = 640;
             output_width = new int[]{40, 20, 10};
             masks = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
             anchors = new int[]{
