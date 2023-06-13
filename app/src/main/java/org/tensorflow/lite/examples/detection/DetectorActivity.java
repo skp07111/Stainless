@@ -255,6 +255,12 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 new Runnable() {
                     @Override
                     public void run() {
+                        // 얼룩 탐지 시작 시간 기록
+                        final long startTime = SystemClock.uptimeMillis();
+
+                        // 얼룩 탐지 지연 시간
+                        final long delayTime = 1000; // 1초 지연
+
                         LOGGER.i("Running detection on image " + currTimestamp);
                         final long startTime = SystemClock.uptimeMillis();
                         final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
