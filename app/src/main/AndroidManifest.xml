@@ -6,6 +6,7 @@
     <uses-sdk />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -21,18 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.ObjectDetection"
         android:hardwareAccelerated="true"
-        android:debuggable="true"
         android:installLocation="internalOnly">
 
         <activity
             android:name=".DetectorActivity"
             android:label="@string/tfe_od_app_name"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 </manifest>

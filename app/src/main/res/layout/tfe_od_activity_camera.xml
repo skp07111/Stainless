@@ -15,25 +15,19 @@
 -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
         android:orientation="vertical">
 
-
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="org.tensorflow.demo.CameraActivity" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -49,7 +43,55 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="430dp"
+        android:orientation="horizontal"
+        android:background="#ffffff">
+
+        <ImageButton
+            android:id="@+id/info_button"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/info_btn" />
+
+        <ImageButton
+            android:id="@+id/share_button"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/sharing_btn"/>
+
+        <ImageButton
+            android:id="@+id/setting_button"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/setting_btn"/>
+    </LinearLayout>
+
     <include
+        android:visibility="gone"
         android:id="@+id/bottom_sheet_layout"
         layout="@layout/tfe_od_layout_bottom_sheet" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="center"
+        tools:context="org.tensorflow.demo.CameraActivity" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

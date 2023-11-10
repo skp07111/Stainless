@@ -2,7 +2,6 @@
   <library name="Gradle: androidx.activity:activity:1.0.0@aar">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/114ba9ca641c8056881b30eee87875d6/activity-1.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/114ba9ca641c8056881b30eee87875d6/activity-1.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/114ba9ca641c8056881b30eee87875d6/activity-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
