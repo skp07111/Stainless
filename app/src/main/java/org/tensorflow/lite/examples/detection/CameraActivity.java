@@ -47,6 +47,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -98,6 +99,12 @@ public abstract class CameraActivity extends AppCompatActivity
   protected ListView deviceView;
   protected TextView threadsTextView;
   protected ListView modelView;
+
+  //메인홈 버튼
+  private ImageButton infoButton;
+  private ImageButton shareButton;
+  private ImageButton settingsButton;
+
   /** Current indices of device and model. */
   int currentDevice = -1;
   int currentModel = -1;
@@ -112,6 +119,34 @@ public abstract class CameraActivity extends AppCompatActivity
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     setContentView(R.layout.tfe_od_activity_camera);
+    infoButton = findViewById(R.id.info_button);
+    shareButton = findViewById(R.id.share_button);
+    settingsButton = findViewById(R.id.setting_button);
+
+    infoButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // '사용법 안내' 기능을 실행
+      }
+    });
+
+    shareButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // '사진 공유' 기능을 실행
+      }
+    });
+
+    settingsButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // '설정' 기능을 실행
+      }
+    });
+
+
+
+
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -121,6 +156,7 @@ public abstract class CameraActivity extends AppCompatActivity
     } else {
       requestPermission();
     }
+
 
     threadsTextView = findViewById(R.id.threads);
     currentNumThreads = Integer.parseInt(threadsTextView.getText().toString().trim());
