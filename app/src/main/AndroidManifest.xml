@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.tensorflow.lite.examples.detection">
     <!-- Tell the system this app requires OpenGL ES 3.1. -->
     <uses-feature android:glEsVersion="0x00030001" android:required="true" />
@@ -34,5 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 </manifest>

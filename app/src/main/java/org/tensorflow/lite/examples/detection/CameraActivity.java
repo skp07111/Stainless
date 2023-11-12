@@ -17,8 +17,10 @@
 package org.tensorflow.lite.examples.detection;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.hardware.Camera;
@@ -39,7 +41,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.speech.tts.TextToSpeech;
 import android.util.Size;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -58,6 +63,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.tensorflow.lite.examples.detection.env.ImageUtils;
 import org.tensorflow.lite.examples.detection.env.Logger;
@@ -67,6 +73,8 @@ public abstract class CameraActivity extends AppCompatActivity
         Camera.PreviewCallback,
 //        CompoundButton.OnCheckedChangeListener,
         View.OnClickListener {
+  private TextToSpeech tts;
+  private GestureDetector gestureDetector;
   private static final Logger LOGGER = new Logger();
 
   private static final int PERMISSIONS_REQUEST = 1;
@@ -123,10 +131,52 @@ public abstract class CameraActivity extends AppCompatActivity
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
 
+// TTS 초기화
+    tts = new TextToSpeech(this, status -> {
+      if (status == TextToSpeech.SUCCESS) {
+        int result = tts.setLanguage(Locale.KOREAN);
+        if (result != TextToSpeech.LANG_MISSING_DATA && result != TextToSpeech.LANG_NOT_SUPPORTED) {
+          // TTS 준비 완료, 버튼 클릭 리스너에서 TTS 사용 가능
+          // 언어 데이터 누락이나 지원하지 않는 언어일 경우 에러 처리
+          LOGGER.e("TTS 언어 설정에 실패했습니다.");
+        }
+      } else {
+        // 초기화 실패 처리
+        LOGGER.e("TTS 초기화에 실패했습니다.");
+      }
+    });
+
+    // 제스처 디텍터 초기화
+    gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+      @Override
+      public boolean onDoubleTap(MotionEvent e) {
+        if (tts != null && tts.isSpeaking()) {
+          tts.stop(); // TTS가 말하고 있으면 정지
+          return true;
+        }
+        return super.onDoubleTap(e);
+      }
+    });
+
+    // 더블 탭을 감지하기 위한 터치 리스너 설정
+    View rootView = findViewById(android.R.id.content);
+    rootView.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return true;
+      }
+    });
+
     infoButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // '사용법 안내' 기능을 실행
+        // '사용법 안내' TTS안내 시작
+        if (tts != null) {
+          String toSpeak = "안녕하세요 시각장애인을 위한 얼룩탐지서비스 Stainless입니다. 지금부터 사용법 안내를 시작합니다." +
+                  "그만 듣고 싶으시다면 화면을 빠르게 두번 누르세요.";
+          tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
       }
     });
 
@@ -256,6 +306,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
     plusImageView.setOnClickListener(this);
     minusImageView.setOnClickListener(this);
+
   }
 
 
@@ -441,6 +492,12 @@ public abstract class CameraActivity extends AppCompatActivity
   @Override
   public synchronized void onDestroy() {
     LOGGER.d("onDestroy " + this);
+    //tts리소스 해제
+    if (tts != null) {
+      tts.stop();
+      tts.shutdown();
+      tts = null; // 참조 제거
+    }
     super.onDestroy();
   }
 
@@ -657,4 +714,5 @@ public abstract class CameraActivity extends AppCompatActivity
   protected abstract void setNumThreads(int numThreads);
 
   protected abstract void setUseNNAPI(boolean isChecked);
+
 }
