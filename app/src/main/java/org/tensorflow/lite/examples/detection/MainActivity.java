@@ -76,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final Logger LOGGER = new Logger();
 
-    public static final int TF_OD_API_INPUT_SIZE = 640;
+    public static final int TF_OD_API_INPUT_SIZE = 416;
 
     private static final boolean TF_OD_API_IS_QUANTIZED = false;
 
-    private static final String TF_OD_API_MODEL_FILE = "best-fp16.tflite";
+    private static final String TF_OD_API_MODEL_FILE = "best-fp16-2.tflite";
 
-    private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/customclasses.txt";
+    private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/customclasses2.txt";
 
     // Minimum detection confidence to track a detection.
     private static final boolean MAINTAIN_ASPECT = true;
