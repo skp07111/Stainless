@@ -21,6 +21,7 @@
     <content url="file://$MODULE_DIR$/../../../app/src/testDebug" />
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Stainless.app.main" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.material:material:1.1.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.appcompat:appcompat:1.1.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.coordinatorlayout:coordinatorlayout:1.1.0@aar" level="project" />
