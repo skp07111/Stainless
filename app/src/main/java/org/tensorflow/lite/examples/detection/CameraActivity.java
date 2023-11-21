@@ -113,6 +113,11 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton shareButton;
   private ImageButton settingsButton;
 
+  //공유하기 버튼 클릭시 하단 탭 교체
+  private LinearLayout bottomTabLayout;
+  private LinearLayout shareTabLayout;
+
+
   /** Current indices of device and model. */
   int currentDevice = -1;
   int currentModel = -1;
@@ -130,6 +135,10 @@ public abstract class CameraActivity extends AppCompatActivity
     infoButton = findViewById(R.id.info_button);
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
+
+    //공유하기 버튼 클릭시 하단 탭 교체
+    bottomTabLayout = findViewById(R.id.bottom_tab_layout);
+    shareTabLayout = findViewById(R.id.share_tab_layout);
 
 // TTS 초기화
     tts = new TextToSpeech(this, status -> {
@@ -183,7 +192,10 @@ public abstract class CameraActivity extends AppCompatActivity
     shareButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // '사진 공유' 기능을 실행
+        // 기존 하단 탭 숨기기
+        bottomTabLayout.setVisibility(View.GONE);
+        // 새로운 공유하기 탭 표시
+        shareTabLayout.setVisibility(View.VISIBLE);
       }
     });
 

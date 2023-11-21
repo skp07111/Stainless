@@ -44,6 +44,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="430dp"
@@ -80,6 +81,18 @@
             android:scaleType="centerCrop"
             android:backgroundTint="@android:color/transparent"
             app:srcCompat="@drawable/setting_btn"/>
+    </LinearLayout>
+
+    <!-- 공유하기 버튼을 누르면 새롭게 교체되는 탭  -->
+    <LinearLayout
+        android:id="@+id/share_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="430dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:visibility="gone">
+
     </LinearLayout>
 
     <include
