@@ -93,6 +93,56 @@
         android:background="#ffffff"
         android:visibility="gone">
 
+        <ImageButton
+            android:id="@+id/person1"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/baseline_person_24"
+            />
+        <TextView
+            android:id="@+id/person1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_marginTop="4dp"/>
+
+        <ImageButton
+            android:id="@+id/person2"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/baseline_person_24"/>
+        <TextView
+            android:id="@+id/person2_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_marginTop="4dp"/>
+
+        <ImageButton
+            android:id="@+id/person3"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/baseline_person_24"/>
+        <TextView
+            android:id="@+id/person3_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_marginTop="4dp"/>
+
     </LinearLayout>
 
     <include
