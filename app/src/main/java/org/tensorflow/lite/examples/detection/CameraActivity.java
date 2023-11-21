@@ -125,6 +125,12 @@ public abstract class CameraActivity extends AppCompatActivity
   private ConstraintLayout shareTabLayout;
   private ConstraintLayout settingsLayout;
 
+  //공유할 상대
+  private ImageButton person1;
+  private ImageButton person2;
+  private ImageButton person3;
+
+
   private Switch switchVibration;
   private Boolean isVibrate = false;
 
@@ -132,9 +138,9 @@ public abstract class CameraActivity extends AppCompatActivity
 
   @Override
   public void onBackPressed() {
-    if (shareTabLayout.getVisibility() == View.VISIBLE) {
+    if (shareTabLayout.getVisibility() == View.VISIBLE || settingsLayout.getVisibility() == View.VISIBLE) {
       shareTabLayout.setVisibility(View.GONE);
-//      settingsLayout.setVisibility(View.GONE);
+      settingsLayout.setVisibility(View.GONE);
       bottomTabLayout.setVisibility(View.VISIBLE);
     } else {
       super.onBackPressed();
@@ -158,12 +164,15 @@ public abstract class CameraActivity extends AppCompatActivity
     infoButton = findViewById(R.id.info_button);
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
-    backButton = findViewById(R.id.back_button);
 
     //공유하기 버튼 클릭시 하단 탭 교체
     bottomTabLayout = findViewById(R.id.bottom_tab_layout);
     shareTabLayout = findViewById(R.id.share_tab_layout);
     settingsLayout = findViewById(R.id.settings_layout);
+
+    person1 = findViewById(R.id.person1);
+    person2 = findViewById(R.id.person2);
+    person3 = findViewById(R.id.person3);
 
     preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
@@ -230,19 +239,48 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
+    person1.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 토스트 메시지 표시
+        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+
+        // TTS를 사용하여 음성 메시지 재생
+        if (tts != null) {
+          tts.speak("김진아님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+      }
+    });
+    person2.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 토스트 메시지 표시
+        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+
+        // TTS를 사용하여 음성 메시지 재생
+        if (tts != null) {
+          tts.speak("박슬기님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+      }
+    });
+    person3.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 토스트 메시지 표시
+        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+
+        // TTS를 사용하여 음성 메시지 재생
+        if (tts != null) {
+          tts.speak("이서영님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+      }
+    });
+
     settingsButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         // '설정' 기능을 실행
         settingsLayout.setVisibility(View.VISIBLE);
-      }
-    });
-
-    backButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        // 설정 화면 숨기기
-        settingsLayout.setVisibility(View.GONE);
       }
     });
 

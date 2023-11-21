@@ -135,7 +135,7 @@
             android:id="@+id/person1_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="김진아"
             app:layout_constraintStart_toStartOf="@id/person1"
             app:layout_constraintTop_toBottomOf="@id/person1" />
 
@@ -158,7 +158,7 @@
             android:id="@+id/person2_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="박슬기"
             app:layout_constraintStart_toStartOf="@id/person2"
             app:layout_constraintTop_toBottomOf="@id/person2" />
 
@@ -181,7 +181,7 @@
             android:id="@+id/person3_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="이서영"
             app:layout_constraintStart_toStartOf="@id/person3"
             app:layout_constraintTop_toBottomOf="@id/person3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -203,6 +203,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+<!--연락처 추가버튼 필요-->
 
             <ImageButton
                 android:id="@+id/back_button"
@@ -212,7 +213,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/baseline_arrow_back_24"
-                tools:layout_editor_absoluteY="50dp" />
+                tools:layout_editor_absoluteY="50dp"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
