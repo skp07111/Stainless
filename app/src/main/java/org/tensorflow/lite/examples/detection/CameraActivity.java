@@ -116,7 +116,16 @@ public abstract class CameraActivity extends AppCompatActivity
   //공유하기 버튼 클릭시 하단 탭 교체
   private LinearLayout bottomTabLayout;
   private LinearLayout shareTabLayout;
-
+  
+  @Override
+  public void onBackPressed() {
+    if (shareTabLayout.getVisibility() == View.VISIBLE) {
+      shareTabLayout.setVisibility(View.GONE);
+      bottomTabLayout.setVisibility(View.VISIBLE);
+    } else {
+      super.onBackPressed();
+    }
+  }
 
   /** Current indices of device and model. */
   int currentDevice = -1;
@@ -139,6 +148,7 @@ public abstract class CameraActivity extends AppCompatActivity
     //공유하기 버튼 클릭시 하단 탭 교체
     bottomTabLayout = findViewById(R.id.bottom_tab_layout);
     shareTabLayout = findViewById(R.id.share_tab_layout);
+
 
 // TTS 초기화
     tts = new TextToSpeech(this, status -> {
@@ -187,6 +197,7 @@ public abstract class CameraActivity extends AppCompatActivity
           tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
         }
       }
+
     });
 
     shareButton.setOnClickListener(new View.OnClickListener() {
