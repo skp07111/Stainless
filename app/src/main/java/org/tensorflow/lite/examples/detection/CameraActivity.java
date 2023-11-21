@@ -40,8 +40,10 @@ import android.os.Trace;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.speech.tts.TextToSpeech;
+import android.text.Layout;
 import android.util.Size;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -55,6 +57,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,8 +117,8 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton settingsButton;
 
   //공유하기 버튼 클릭시 하단 탭 교체
-  private LinearLayout bottomTabLayout;
-  private LinearLayout shareTabLayout;
+  private ConstraintLayout bottomTabLayout;
+  private ConstraintLayout shareTabLayout;
 
   @Override
   public void onBackPressed() {

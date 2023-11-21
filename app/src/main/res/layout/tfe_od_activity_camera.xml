@@ -43,107 +43,138 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="430dp"
-        android:orientation="horizontal"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/info_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
             android:layout_marginTop="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/info_btn" />
+            app:srcCompat="@drawable/info_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/share_button"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck"/>
 
         <ImageButton
             android:id="@+id/share_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/sharing_btn"/>
+            app:srcCompat="@drawable/sharing_btn"
+            app:layout_constraintStart_toEndOf="@id/info_button"
+            app:layout_constraintEnd_toStartOf="@id/setting_button"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck"/>
 
         <ImageButton
             android:id="@+id/setting_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
             android:layout_marginTop="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/setting_btn"/>
-    </LinearLayout>
+            app:srcCompat="@drawable/setting_btn"
+            app:layout_constraintStart_toEndOf="@id/share_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 공유하기 버튼을 누르면 새롭게 교체되는 탭  -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/share_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="430dp"
-        android:orientation="horizontal"
         android:background="#ffffff"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Person 1 -->
         <ImageButton
             android:id="@+id/person1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerCrop"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_person_24"
-            />
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/person2"
+            app:srcCompat="@drawable/baseline_person_24" />
+
         <TextView
             android:id="@+id/person1_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginTop="4dp"/>
+            app:layout_constraintStart_toStartOf="@id/person1"
+            app:layout_constraintTop_toBottomOf="@id/person1" />
 
+        <!-- Person 2 -->
         <ImageButton
             android:id="@+id/person2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerCrop"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_person_24"/>
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toEndOf="@id/person1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/person3"
+            app:srcCompat="@drawable/baseline_person_24" />
+
         <TextView
             android:id="@+id/person2_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginTop="4dp"/>
+            app:layout_constraintStart_toStartOf="@id/person2"
+            app:layout_constraintTop_toBottomOf="@id/person2" />
 
+        <!-- Person 3 -->
         <ImageButton
             android:id="@+id/person3"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerCrop"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_person_24"/>
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toEndOf="@id/person2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/baseline_person_24" />
+
         <TextView
             android:id="@+id/person3_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginTop="4dp"/>
-
-    </LinearLayout>
+            app:layout_constraintStart_toStartOf="@id/person3"
+            app:layout_constraintTop_toBottomOf="@id/person3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:visibility="gone"
