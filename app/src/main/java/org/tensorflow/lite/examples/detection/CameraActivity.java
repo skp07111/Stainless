@@ -134,6 +134,7 @@ public abstract class CameraActivity extends AppCompatActivity
   public void onBackPressed() {
     if (shareTabLayout.getVisibility() == View.VISIBLE) {
       shareTabLayout.setVisibility(View.GONE);
+//      settingsLayout.setVisibility(View.GONE);
       bottomTabLayout.setVisibility(View.VISIBLE);
     } else {
       super.onBackPressed();
