@@ -133,11 +133,6 @@ public abstract class CameraActivity extends AppCompatActivity
   //연락처 추가
   private ImageButton add_button;
 
-//  private Switch switchVibration;
-//  private Boolean isVibrate = false;
-//
-//  SharedPreferences preferences;
-
   @Override
   public void onBackPressed() {
     if (shareTabLayout.getVisibility() == View.VISIBLE || settingsLayout.getVisibility() == View.VISIBLE) {
@@ -177,11 +172,6 @@ public abstract class CameraActivity extends AppCompatActivity
     person1 = findViewById(R.id.person1);
     person2 = findViewById(R.id.person2);
     person3 = findViewById(R.id.person3);
-
-//    preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-//    SharedPreferences.Editor editor = preferences.edit();
-//    // 진동 설정 불러오기
-//    isVibrate = preferences.getBoolean("isVibrate", false);
 
 // TTS 초기화
     tts = new TextToSpeech(this, status -> {
@@ -280,29 +270,7 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
-    settingsButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        // '설정' 기능을 실행
-        settingsLayout.setVisibility(View.VISIBLE);
-      }
-    });
-
-//    switchVibration = findViewById(R.id.switch_vibration);
-//    switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//      @Override
-//      public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//        if(isChecked){
-//          isVibrate = true;
-//          switchVibration.setText("진동 ON");
-//        } else {
-//          isVibrate = false;
-//          switchVibration.setText("진동 OFF");
-//        }
-//        editor.putBoolean("isVibarate", isVibrate);
-//        editor.apply();
-//      }
-//    });
+    settingsButton.setOnClickListener(v -> startActivity(new Intent(CameraActivity.this, SettingActivity.class)));
 
     add_button.setOnClickListener(new View.OnClickListener() {
       @Override
