@@ -19,6 +19,8 @@ package org.tensorflow.lite.examples.detection;
 import static android.speech.tts.TextToSpeech.ERROR;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -262,7 +264,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         final long startTime = SystemClock.uptimeMillis();
 
                         // 얼룩 탐지 지연 시간
-                        final long delayTime = 3000; // 3초 지연
+                        final long delayTime = 2000; // 3초 지연
 
                         // 지연 시간만큼 대기
                         try {
@@ -303,10 +305,18 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
                                 result.setLocation(location);
                                 mappedRecognitions.add(result);
-                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                if (vibrator.hasVibrator()) { // 진동 가능한 장치인지 확인
-                                    long[] pattern = {0, 1000, 2000}; // 진동 패턴 (1초 진동 후 2초 쉼)
-                                    vibrator.vibrate(pattern, -1); // -1은 반복 없음을 의미
+
+                                SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+                                Boolean isVibrate = preferences.getBoolean("isVibrate", false);
+                                if (isVibrate == false) {
+                                    tts.speak("얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                }
+                                else {
+                                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                    if (vibrator.hasVibrator()) { // 진동 가능한 장치인지 확인
+                                        long[] pattern = {0, 1000, 1000}; // 진동 패턴 (1초 진동 후 1초 쉼)
+                                        vibrator.vibrate(pattern, -1); // -1은 반복 없음을 의미
+                                    }
                                 }
                             }
                         }
