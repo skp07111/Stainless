@@ -43,10 +43,11 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_tab_layout"
@@ -56,6 +57,7 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:background="#ffffff"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
@@ -104,91 +106,91 @@
                 tools:ignore="SpeakableTextPresentCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 공유하기 버튼을 누르면 새롭게 교체되는 탭  -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/share_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="430dp"
-        android:background="#ffffff"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Person 1 -->
-        <ImageButton
-            android:id="@+id/person1"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@android:color/transparent"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/person2"
-            app:srcCompat="@drawable/baseline_person_24"
-            tools:ignore="SpeakableTextPresentCheck"/>
-
-        <TextView
-            android:id="@+id/person1_name"
-            android:layout_width="wrap_content"
+        <!-- 공유하기 버튼을 누르면 새롭게 교체되는 탭  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/share_tab_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="김진아"
-            app:layout_constraintStart_toStartOf="@id/person1"
-            app:layout_constraintTop_toBottomOf="@id/person1" />
+            android:layout_marginTop="430dp"
+            android:layout_marginBottom="0dp"
+            android:background="#ffffff"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Person 2 -->
-        <ImageButton
-            android:id="@+id/person2"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@android:color/transparent"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toEndOf="@id/person1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/person3"
-            app:srcCompat="@drawable/baseline_person_24"
-            tools:ignore="SpeakableTextPresentCheck"/>
+            <!-- Person 1 -->
+            <ImageButton
+                android:id="@+id/person1"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toStartOf="@+id/person2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_person_24"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-        <TextView
-            android:id="@+id/person2_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="박슬기"
-            app:layout_constraintStart_toStartOf="@id/person2"
-            app:layout_constraintTop_toBottomOf="@id/person2" />
+            <TextView
+                android:id="@+id/person1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="김진아"
+                app:layout_constraintStart_toStartOf="@id/person1"
+                app:layout_constraintTop_toBottomOf="@id/person1" />
 
-        <!-- Person 3 -->
-        <ImageButton
-            android:id="@+id/person3"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@android:color/transparent"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toEndOf="@id/person2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_person_24"
-            tools:ignore="SpeakableTextPresentCheck"/>
+            <!-- Person 2 -->
+            <ImageButton
+                android:id="@+id/person2"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toStartOf="@id/person3"
+                app:layout_constraintStart_toEndOf="@id/person1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_person_24"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-        <TextView
-            android:id="@+id/person3_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이서영"
-            app:layout_constraintStart_toStartOf="@id/person3"
-            app:layout_constraintTop_toBottomOf="@id/person3" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/person2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="박슬기"
+                app:layout_constraintStart_toStartOf="@id/person2"
+                app:layout_constraintTop_toBottomOf="@id/person2" />
+
+            <!-- Person 3 -->
+            <ImageButton
+                android:id="@+id/person3"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/person2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_person_24"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/person3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이서영"
+                app:layout_constraintStart_toStartOf="@id/person3"
+                app:layout_constraintTop_toBottomOf="@id/person3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/settings_layout"
-            android:visibility="gone"
+
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="#ffffff"
@@ -196,25 +198,35 @@
 
             <Switch
                 android:id="@+id/switch_vibration"
-                android:layout_width="500dp"
-                android:layout_height="50dp"
+                android:layout_width="250dp"
+                android:layout_height="120dp"
                 android:text="진동 OFF"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-<!--연락처 추가버튼 필요-->
 
             <ImageButton
-                android:id="@+id/back_button"
-                android:layout_width="500dp"
-                android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
+                android:id="@+id/add_button"
+                android:layout_width="250dp"
+                android:layout_height="120dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/baseline_arrow_back_24"
-                tools:layout_editor_absoluteY="50dp"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_library_add_24" />
+
+            <!--연락처 추가버튼 필요-->
+
+
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/back_button"-->
+            <!--                android:layout_width="500dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:scaleType="fitCenter"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:srcCompat="@drawable/baseline_arrow_back_24"-->
+            <!--                tools:layout_editor_absoluteY="50dp"-->
+            <!--                tools:ignore="MissingConstraints" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

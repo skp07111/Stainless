@@ -124,12 +124,14 @@ public abstract class CameraActivity extends AppCompatActivity
   private ConstraintLayout bottomTabLayout;
   private ConstraintLayout shareTabLayout;
   private ConstraintLayout settingsLayout;
-
+  
   //공유할 상대
   private ImageButton person1;
   private ImageButton person2;
   private ImageButton person3;
 
+  //연락처 추가
+  private ImageButton add_button;
 
   private Switch switchVibration;
   private Boolean isVibrate = false;
@@ -170,6 +172,8 @@ public abstract class CameraActivity extends AppCompatActivity
     shareTabLayout = findViewById(R.id.share_tab_layout);
     settingsLayout = findViewById(R.id.settings_layout);
 
+    add_button = findViewById(R.id.add_button);
+    
     person1 = findViewById(R.id.person1);
     person2 = findViewById(R.id.person2);
     person3 = findViewById(R.id.person3);
@@ -300,7 +304,13 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
-
+    add_button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 사용자의 연락처에 접근하여 목록을 받아오고, 새로 추가 혹은 변경
+        
+      }
+    });
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
