@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.hardware.Camera;
@@ -59,6 +60,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -115,10 +117,18 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton infoButton;
   private ImageButton shareButton;
   private ImageButton settingsButton;
+  private ImageButton backButton;
+
 
   //공유하기 버튼 클릭시 하단 탭 교체
   private ConstraintLayout bottomTabLayout;
   private ConstraintLayout shareTabLayout;
+  private ConstraintLayout settingsLayout;
+
+  private Switch switchVibration;
+  private Boolean isVibrate = false;
+
+  SharedPreferences preferences;
 
   @Override
   public void onBackPressed() {
@@ -147,11 +157,17 @@ public abstract class CameraActivity extends AppCompatActivity
     infoButton = findViewById(R.id.info_button);
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
+    backButton = findViewById(R.id.back_button);
 
     //공유하기 버튼 클릭시 하단 탭 교체
     bottomTabLayout = findViewById(R.id.bottom_tab_layout);
     shareTabLayout = findViewById(R.id.share_tab_layout);
+    settingsLayout = findViewById(R.id.settings_layout);
 
+    preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    // 진동 설정 불러오기
+    isVibrate = preferences.getBoolean("isVibrate", false);
 
 // TTS 초기화
     tts = new TextToSpeech(this, status -> {
@@ -217,9 +233,33 @@ public abstract class CameraActivity extends AppCompatActivity
       @Override
       public void onClick(View v) {
         // '설정' 기능을 실행
+        settingsLayout.setVisibility(View.VISIBLE);
       }
     });
 
+    backButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 설정 화면 숨기기
+        settingsLayout.setVisibility(View.GONE);
+      }
+    });
+
+    switchVibration = findViewById(R.id.switch_vibration);
+    switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if(isChecked){
+          isVibrate = true;
+          switchVibration.setText("진동 ON");
+        } else {
+          isVibrate = false;
+          switchVibration.setText("진동 OFF");
+        }
+        editor.putBoolean("isVibarate", isVibrate);
+        editor.apply();
+      }
+    });
 
 
 
