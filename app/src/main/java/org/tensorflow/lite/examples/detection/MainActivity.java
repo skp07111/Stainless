@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final Logger LOGGER = new Logger();
 
-    public static final int TF_OD_API_INPUT_SIZE = 416;
+    public static final int TF_OD_API_INPUT_SIZE = 640;
 
     private static final boolean TF_OD_API_IS_QUANTIZED = false;
 
-    private static final String TF_OD_API_MODEL_FILE = "best-fp16-2.tflite";
+    private static final String TF_OD_API_MODEL_FILE = "best-fp16-3.tflite";
 
     private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/customclasses2.txt";
 
