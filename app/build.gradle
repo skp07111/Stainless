@@ -34,6 +34,7 @@ android {
     task wrapper(type: Wrapper) {
         gradleVersion = '7.0'
     }
+    namespace 'org.tensorflow.lite.examples.detection'
 }
 
 // import DownloadModels task

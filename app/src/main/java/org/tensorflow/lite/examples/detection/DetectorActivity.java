@@ -262,16 +262,16 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         LOGGER.i("Running detection on image " + currTimestamp);
                         // 얼룩 탐지 시작 시간 기록
                         final long startTime = SystemClock.uptimeMillis();
-
-                        // 얼룩 탐지 지연 시간
-                        final long delayTime = 2000; // 3초 지연
-
-                        // 지연 시간만큼 대기
-                        try {
-                            Thread.sleep(delayTime);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+//
+//                        // 얼룩 탐지 지연 시간
+//                        final long delayTime = 3000; // 3초 지연
+//
+//                        // 지연 시간만큼 대기
+//                        try {
+//                            Thread.sleep(delayTime);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
                         final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
 
                         // 이미지 처리 완료 후 경과 시간 계산
@@ -310,6 +310,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                                 Boolean isVibrate = preferences.getBoolean("isVibrate", false);
                                 if (isVibrate == false) {
                                     tts.speak("얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    Log.d("MyTag", "얼룩명:" + result.getTitle());
                                 }
                                 else {
                                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
