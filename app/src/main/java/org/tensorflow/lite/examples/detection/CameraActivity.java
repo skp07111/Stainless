@@ -17,11 +17,9 @@
 package org.tensorflow.lite.examples.detection;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.hardware.Camera;
@@ -38,13 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.speech.tts.TextToSpeech;
-import android.text.Layout;
 import android.util.Size;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -54,24 +46,27 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import org.tensorflow.lite.examples.detection.env.ImageUtils;
+import org.tensorflow.lite.examples.detection.env.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import org.tensorflow.lite.examples.detection.env.ImageUtils;
-import org.tensorflow.lite.examples.detection.env.Logger;
 
 public abstract class CameraActivity extends AppCompatActivity
         implements OnImageAvailableListener,
@@ -97,7 +92,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private int[] rgbBytes = null;
   private int yRowStride;
   protected int defaultModelIndex = 0;
-  protected int defaultDeviceIndex = 0;
+  protected int defaultDeviceIndex = 1; // cpu:0 , gpu:1, nnpi: 2
   private Runnable postInferenceCallback;
   private Runnable imageConverter;
   protected ArrayList<String> modelStrings = new ArrayList<String>();

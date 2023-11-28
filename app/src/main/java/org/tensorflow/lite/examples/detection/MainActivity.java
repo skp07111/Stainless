@@ -1,7 +1,5 @@
 package org.tensorflow.lite.examples.detection;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +15,8 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
 import org.tensorflow.lite.examples.detection.env.ImageUtils;
