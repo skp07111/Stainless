@@ -19,7 +19,6 @@ package org.tensorflow.lite.examples.detection;
 import static android.speech.tts.TextToSpeech.ERROR;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -38,11 +37,6 @@ import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.Toast;
-import android.speech.tts.TextToSpeech;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
 import org.tensorflow.lite.examples.detection.customview.OverlayView.DrawCallback;
@@ -53,6 +47,11 @@ import org.tensorflow.lite.examples.detection.tflite.Classifier;
 import org.tensorflow.lite.examples.detection.tflite.DetectorFactory;
 import org.tensorflow.lite.examples.detection.tflite.YoloV5Classifier;
 import org.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * An activity that uses a TensorFlowMultiBoxDetector and ObjectTracker to detect and then track
@@ -101,6 +100,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         final int modelIndex = modelView.getCheckedItemPosition();
         final String modelString = modelStrings.get(modelIndex);
 
+        final int deviceIndex = deviceView.getCheckedItemPosition();
+        final String deviceString = deviceStrings.get(deviceIndex);
+
         try {
             detector = DetectorFactory.getDetector(getAssets(), modelString);
         } catch (final IOException e) {
@@ -120,7 +122,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
         sensorOrientation = rotation - getScreenOrientation();
         LOGGER.i("Camera orientation relative to screen canvas: %d", sensorOrientation);
-
+        Log.d("device!!", deviceString );
         LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
         rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Config.ARGB_8888);
         croppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Config.ARGB_8888);
@@ -174,7 +176,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
             // Lookup names of parameters.
             String modelString = modelStrings.get(modelIndex);
             String device = deviceStrings.get(deviceIndex);
-
             LOGGER.i("Changing model to " + modelString + " device " + device);
 
             // Try to load model.

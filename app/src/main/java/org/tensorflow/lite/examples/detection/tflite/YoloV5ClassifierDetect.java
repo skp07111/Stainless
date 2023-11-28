@@ -15,6 +15,8 @@ limitations under the License.
 
 package org.tensorflow.lite.examples.detection.tflite;
 
+import static org.tensorflow.lite.examples.detection.env.Utils.expit;
+
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
@@ -42,8 +44,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Vector;
-
-import static org.tensorflow.lite.examples.detection.env.Utils.expit;
 
 
 /**

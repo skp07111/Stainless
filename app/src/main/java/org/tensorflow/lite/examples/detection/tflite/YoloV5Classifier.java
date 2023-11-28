@@ -74,7 +74,6 @@ public class YoloV5Classifier implements Classifier {
             final int[] anchors*/)
             throws IOException {
         final YoloV5Classifier d = new YoloV5Classifier();
-
         String actualFilename = labelFilename.split("file:///android_asset/")[1];
         InputStream labelsInput = assetManager.open(actualFilename);
         BufferedReader br = new BufferedReader(new InputStreamReader(labelsInput));
