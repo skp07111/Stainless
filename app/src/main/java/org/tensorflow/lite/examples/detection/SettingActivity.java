@@ -1,25 +1,33 @@
 package org.tensorflow.lite.examples.detection;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class SettingActivity extends AppCompatActivity {
 
     private Switch switchVibration;
     private ImageButton backButton;
+    private Button contactButton;
+
     private Boolean isVibrate = false;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +39,8 @@ public class SettingActivity extends AppCompatActivity {
         isVibrate = preferences.getBoolean("isVibrate", false);
 
         backButton = findViewById(R.id.back_button);
+        contactButton = findViewById(R.id.contact_button);
+        FloatingActionButton fabAddContact = findViewById(R.id.fab_add_contact);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,5 +78,29 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // ContactListFragment로 이동
+                ContactListFragment contactListFragment = new ContactListFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, contactListFragment); // 'fragment_container'는 프래그먼트를 표시할 레이아웃의 ID입니다.
+                transaction.addToBackStack(null); // 이전 프래그먼트로 돌아갈 수 있게 스택에 추가
+                transaction.commit(); // 트랜잭션 실행
+
+                // FAB 표시
+                fabAddContact.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fabAddContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 연락처 목록 화면으로 전환
+                startActivity(new Intent(SettingActivity.this, ContactListFragment.class));
+            }
+        });
+
     }
+
 }

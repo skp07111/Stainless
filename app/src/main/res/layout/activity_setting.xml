@@ -10,9 +10,17 @@
             android:id="@+id/switch_vibration"
             android:layout_gravity="center"
             android:layout_width="300dp"
-            android:layout_height="500dp"
+            android:layout_height="300dp"
             android:text="진동 OFF"
             android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/contact_button"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:text="연락처 설정"
+        android:textSize="20sp"/>
 
         <ImageButton
             android:id="@+id/back_button"
@@ -21,4 +29,20 @@
             android:scaleType="fitCenter"
             android:text="돌아가기"
             app:srcCompat="@drawable/baseline_arrow_back_24" />
-    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/baseline_add_circle_24"
+        android:visibility="gone" />
+
+</LinearLayout>

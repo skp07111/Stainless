@@ -78,8 +78,9 @@ public abstract class CameraActivity extends AppCompatActivity
   private static final Logger LOGGER = new Logger();
 
   private static final int PERMISSIONS_REQUEST = 1;
-
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
+  private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+  private static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
   private static final String ASSET_PATH = "";
   protected int previewWidth = 0;
   protected int previewHeight = 0;
@@ -119,7 +120,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private ConstraintLayout bottomTabLayout;
   private ConstraintLayout shareTabLayout;
   private ConstraintLayout settingsLayout;
-  
+
   //공유할 상대
   private ImageButton person1;
   private ImageButton person2;
@@ -163,7 +164,7 @@ public abstract class CameraActivity extends AppCompatActivity
     settingsLayout = findViewById(R.id.settings_layout);
 
     add_button = findViewById(R.id.add_button);
-    
+
     person1 = findViewById(R.id.person1);
     person2 = findViewById(R.id.person2);
     person3 = findViewById(R.id.person3);
@@ -228,6 +229,9 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
+    settingsButton.setOnClickListener(v -> startActivity(new Intent(CameraActivity.this, SettingActivity.class)));
+
+
     person1.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -270,8 +274,11 @@ public abstract class CameraActivity extends AppCompatActivity
     add_button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // 사용자의 연락처에 접근하여 목록을 받아오고, 새로 추가 혹은 변경
-        
+        // 연락처 버튼을 누르면 현재 등록되어있는 사람 3명이 리스트로 뜨고, 아래의 +버튼을 누르면 연락처를 불러오기
+        // 사용자의 연락처에 접근하여 목록을 받아오고, 새로추가 혹은 등록할사람 선택 후 확인버튼을 누르면 다시 리스트로 화면전환
+        // 여기서 이미 등록되었는데 제거하고싶은 사람은... 나중에 구현하기
+
+
       }
     });
 
@@ -609,7 +616,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private boolean hasPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED;
+      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED&&
+              checkSelfPermission(PERMISSION_READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     } else {
       return true;
     }
@@ -617,14 +625,14 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private void requestPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
-        Toast.makeText(
-                        CameraActivity.this,
-                        "Camera permission is required for this demo",
-                        Toast.LENGTH_LONG)
-                .show();
-      }
-      requestPermissions(new String[] {PERMISSION_CAMERA}, PERMISSIONS_REQUEST);
+//      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
+//        Toast.makeText(
+//                        CameraActivity.this,
+//                        "Camera permission is required for this demo",
+//                        Toast.LENGTH_LONG)
+//                .show();
+//      }
+      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
     }
   }
 
