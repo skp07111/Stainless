@@ -378,116 +378,38 @@ public class YoloV5Classifier implements Classifier {
     }
 
     public ArrayList<Recognition> recognizeImage(Bitmap bitmap) {
+        // 입력된 비트맵 이미지를 ByteBuffer 형태로 변환
         ByteBuffer byteBuffer_ = convertBitmapToByteBuffer(bitmap);
 
+        // 모델의 출력값을 저장할 Map 및 클래스명을 저장하는 HashMap을 초기화
         Map<Integer, Object> outputMap = new HashMap<>();
-       // HashMap<String,String> nameMap = new HashMap<String,String>(){{
-           // put("stain", "stain");
-            /*
-            put("person", "stain");
-            put("bicycle", "stain");
-            put("car", "stain");
-            put("motorbike", "stain");
-            put("aeroplane", "stain");
-            put("bus", "stain");
-            put("train", "stain");
-            put("truck", "stain");
-            put("boat", "stain");
-            put("traffic light", "stain");
-            put("fire hydrant", "stain");
-            put("stop sign", "stain");
-            put("parking meter", "stain");
-            put("bench", "stain");
-            put("bird", "stain");
-            put("cat", "stain");
-            put("dog", "stain");
-            put("horse", "stain");
-            put("sheep", "stain");
-            put("cow", "stain");
-            put("elephant", "stain");
-            put("bear", "stain");
-            put("zebra", "stain");
-            put("giraffe", "stain");
-            put("backpack", "stain");
-            put("umbrella", "stain");
-            put("handbag", "stain");
-            put("tie", "stain");
-            put("suitcase", "stain");
-            put("frisbee", "stain");
-            put("skis", "stain");
-            put("snowboard", "stain");
-            put("sports ball", "stain");
-            put("kite", "stain");
-            put("baseball bat", "stain");
-            put("baseball glove", "stain");
-            put("skateboard", "stain");
-            put("surfboard", "stain");
-            put("tennis racket", "stain");
-            put("bottle", "stain");
-            put("wine glass", "stain");
-            put("cup", "stain");
-            put("fork", "stain");
-            put("knife", "stain");
-            put("spoon", "stain");
-            put("bowl", "stain");
-            put("banana", "stain");
-            put("apple", "stain");
-            put("sandwich", "stain");
-            put("orange", "stain");
-            put("broccoli", "stain");
-            put("carrot", "stain");
-            put("hot dog", "stain");
-            put("pizza", "stain");
-            put("donut", "stain");
-            put("cake", "stain");
-            put("chair", "stain");
-            put("sofa", "stain");
-            put("potted plant", "stain");
-            put("bed", "stain");
-            put("dining table", "stain");
-            put("toilet", "stain");
-            put("tvmonitor", "stain");
-            put("laptop", "stain");
-            put("mouse", "stain");
-            put("remote", "stain");
-            put("keyboard", "stain");
-            put("cell phone", "stain");
-            put("microwave", "stain");
-            put("oven", "stain");
-            put("toaster", "stain");
-            put("sink", "stain");
-            put("refrigerator", "stain");
-            put("book", "stain");
-            put("vase", "stain");
-            put("scissors", "stain");
-            put("teddy bear", "stain");
-            put("hair drier", "stain");
-            put("toothbrush", "stain");
-            */
-       //}};
+        HashMap<String,String> nameMap = new HashMap<String,String>(){{
+            put("beverage", "음료얼룩");
+            put("food", "음식얼룩");
+            put("pen", "펜얼룩");
 
- //       float[][][] outbuf = new float[1][output_box][labels.size() + 5];
+       }};
 
+        // 모델 추론을 실행하여 출력값을 outputMap에 저장
         outData.rewind();
         outputMap.put(0, outData);
         Log.d("YoloV5Classifier", "mObjThresh: " + getObjThresh());
-
         Object[] inputArray = {imgData};
         tfLite.runForMultipleInputsOutputs(inputArray, outputMap);
 
-        // Tensor outputTensor = tfLite.getOutputTensor(0); //추가
-        // int bufferSize = outputTensor.numBytes(); // 추가
-        // ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize); // 추가
-        // outputTensor.copyTo(byteBuffer);
+        // 모델 출력값을 ByteBuffer로 변환하고 detections ArrayList를 초기화
         ByteBuffer byteBuffer = (ByteBuffer) outputMap.get(0);
         byteBuffer.rewind();
-
         ArrayList<Recognition> detections = new ArrayList<Recognition>();
 
+        // 출력값을 담을 배열 초기화
         float[][][] out = new float[1][output_box][numClass + 5];
         Log.d("YoloV5Classifier", "out[0] detect start");
+
+        // 각 bounding box에 대한 정보 추출
         for (int i = 0; i < output_box; ++i) {
             for (int j = 0; j < numClass + 5; ++j) {
+                // 모델이 양자화되었는지 확인하고 해당 값 추출하여 out 배열에 저장
                 if (isModelQuantized){
                     out[0][i][j] = oup_scale * (((int) byteBuffer.get() & 0xFF) - oup_zero_point);
                 }
@@ -495,20 +417,23 @@ public class YoloV5Classifier implements Classifier {
                     out[0][i][j] = byteBuffer.getFloat();
                 }
             }
-            // Denormalize xywh
+            // xywh 값을 입력 이미지 크기로 변환
             for (int j = 0; j < 4; ++j) {
                 out[0][i][j] *= getInputSize();
             }
         }
+
+        // 각 bounding box에 대해 가장 확률이 높은 Class 예측
         for (int i = 0; i < output_box; ++i){
             final int offset = 0;
             final float confidence = out[0][i][4];
             int detectedClass = -1;
             float maxClass = 0;
 
+            // 각 Class의 확률값 추출하여 최대 확률을 갖는 Class를 선택
             final float[] classes = new float[labels.size()];
             for (int c = 0; c < labels.size(); ++c) {
-                classes[c] = out[0][i][5]; // classes[c] = out[0][i][5 + c]를 수정
+                classes[c] = out[0][i][5+c];
             }
 
             for (int c = 0; c < labels.size(); ++c) {
@@ -518,6 +443,7 @@ public class YoloV5Classifier implements Classifier {
                 }
             }
 
+            // 확률이 설정된 임계값을 초과하는 경우 해당 정보를 추출하여 detections에 추가
             final float confidenceInClass = maxClass * confidence;
             if (confidenceInClass > getObjThresh()) {
                 final float xPos = out[0][i][0];
@@ -528,20 +454,28 @@ public class YoloV5Classifier implements Classifier {
                 Log.d("YoloV5Classifier",
                         Float.toString(xPos) + ',' + yPos + ',' + w + ',' + h);
 
+                // Bounding box 좌표 계산하여 RectF 객체 생성하여 detections에 추가
                 final RectF rect =
                         new RectF(
                                 Math.max(0, xPos - w / 2),
                                 Math.max(0, yPos - h / 2),
                                 Math.min(bitmap.getWidth() - 1, xPos + w / 2),
                                 Math.min(bitmap.getHeight() - 1, yPos + h / 2));
-                detections.add(new Recognition("" + offset, labels.get(detectedClass),
-                        confidenceInClass, rect, detectedClass));
-            }
-        }
 
+                // 각 클래스에 대한 정보를 detections 리스트에 추가 (수정한 부분)
+                for (int c = 0; c < labels.size(); ++c) {
+                    float classConfidence = out[0][i][5 + c];
+                    if (classConfidence > getObjThresh()) {
+                        String className = labels.get(c);
+                        detections.add(new Recognition("" + i, className, classConfidence, rect, c));
+                    }
+                }
+
+            }
+        } // for문완료
         Log.d("YoloV5Classifier", "detect end");
+        // 비슷한 검출 결과 제거를 위해 비최대 억제 수행
         final ArrayList<Recognition> recognitions = nms(detections);
-//        final ArrayList<Recognition> recognitions = detections;
         return recognitions;
     }
 
