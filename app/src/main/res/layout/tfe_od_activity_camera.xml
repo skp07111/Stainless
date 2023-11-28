@@ -137,6 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="김진아"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person1"
                 app:layout_constraintTop_toBottomOf="@id/person1" />
 
@@ -160,6 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="박슬기"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person2"
                 app:layout_constraintTop_toBottomOf="@id/person2" />
 
@@ -183,6 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이서영"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person3"
                 app:layout_constraintTop_toBottomOf="@id/person3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
