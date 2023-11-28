@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.appcompat:appcompat:1.1.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/0886f4230ffc8e577964bae3afd4bfa9/transformed/appcompat-1.1.0/annotations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/bc065d3ad60c9a73fa0d806f5a1266fd/transformed/appcompat-1.1.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/0886f4230ffc8e577964bae3afd4bfa9/transformed/appcompat-1.1.0/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/0886f4230ffc8e577964bae3afd4bfa9/transformed/appcompat-1.1.0/AndroidManifest.xml" />
-      <root url="file://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/0886f4230ffc8e577964bae3afd4bfa9/transformed/appcompat-1.1.0/res" />
+      <root url="file://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/bc065d3ad60c9a73fa0d806f5a1266fd/transformed/appcompat-1.1.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/bc065d3ad60c9a73fa0d806f5a1266fd/transformed/appcompat-1.1.0/res" />
+      <root url="jar://$PROJECT_DIR$/../23_HF069/.gradle/caches/transforms-3/bc065d3ad60c9a73fa0d806f5a1266fd/transformed/appcompat-1.1.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
