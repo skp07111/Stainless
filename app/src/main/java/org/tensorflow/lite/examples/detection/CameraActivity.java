@@ -57,6 +57,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -113,8 +114,6 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton infoButton;
   private ImageButton shareButton;
   private ImageButton settingsButton;
-  private ImageButton backButton;
-
 
   //공유하기 버튼 클릭시 하단 탭 교체
   private ConstraintLayout bottomTabLayout;
@@ -158,7 +157,7 @@ public abstract class CameraActivity extends AppCompatActivity
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
 
-    //공유하기 버튼 클릭시 하단 탭 교체
+    // 하단 탭 버튼 클릭시 화면 교체
     bottomTabLayout = findViewById(R.id.bottom_tab_layout);
     shareTabLayout = findViewById(R.id.share_tab_layout);
     settingsLayout = findViewById(R.id.settings_layout);
@@ -209,12 +208,17 @@ public abstract class CameraActivity extends AppCompatActivity
     infoButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // '사용법 안내' TTS안내 시작
-        if (tts != null) {
-          String toSpeak = "안녕하세요 시각장애인을 위한 얼룩탐지서비스 Stainless입니다. 지금부터 사용법 안내를 시작합니다." +
-                  "그만 듣고 싶으시다면 화면을 빠르게 두번 누르세요.";
-          tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-        }
+//        // '사용법 안내' TTS안내 시작
+//        if (tts != null) {
+//          String toSpeak = "안녕하세요 시각장애인을 위한 얼룩탐지서비스 Stainless입니다. 지금부터 사용법 안내를 시작합니다." +
+//                  "그만 듣고 싶으시다면 화면을 빠르게 두번 누르세요.";
+//          tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+//        }
+
+        // QnaActivity 시작
+        Intent intent = new Intent(CameraActivity.this, QnaActivity.class);
+        startActivity(intent);
+
       }
 
     });
