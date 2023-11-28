@@ -620,8 +620,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private boolean hasPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED&&
-              checkSelfPermission(PERMISSION_READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED;
     } else {
       return true;
     }
@@ -629,14 +628,14 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private void requestPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
-//        Toast.makeText(
-//                        CameraActivity.this,
-//                        "Camera permission is required for this demo",
-//                        Toast.LENGTH_LONG)
-//                .show();
-//      }
-      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
+      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
+        Toast.makeText(
+                        CameraActivity.this,
+                        "Camera permission is required for this demo",
+                        Toast.LENGTH_LONG)
+                .show();
+      }
+  //    requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
     }
   }
 
