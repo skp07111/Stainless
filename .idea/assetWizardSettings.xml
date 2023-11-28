@@ -310,8 +310,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="baseline_library_add_24" />
-                            <entry key="sourceFile" value="C:\Users\green\Downloads\sharing sign.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="vector__3_" />
+                            <entry key="sourceFile" value="C:\Users\green\Downloads\Vector (3).svg" />
                           </map>
                         </option>
                       </PersistentState>
