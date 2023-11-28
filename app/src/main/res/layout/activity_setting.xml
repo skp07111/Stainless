@@ -12,7 +12,8 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:text="진동 OFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone"/>
 
     <Button
         android:id="@+id/contact_button"
@@ -20,7 +21,8 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:text="연락처 설정"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/back_button"
@@ -28,14 +30,33 @@
             android:layout_height="129dp"
             android:scaleType="fitCenter"
             android:text="돌아가기"
-            app:srcCompat="@drawable/baseline_arrow_back_24" />
+            app:srcCompat="@drawable/baseline_arrow_back_24"
+            android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="400dp"
+            android:layout_height="750dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/settingpage" />
+
+        <Button
+            android:id="@+id/tmp_button"
+            android:layout_width="400dp"
+            android:layout_height="750dp"
+            android:background="#00ff0000"
+            android:text=" "
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_contact"
