@@ -49,6 +49,7 @@ import org.tensorflow.lite.examples.detection.tflite.YoloV5Classifier;
 import org.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -86,6 +87,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private MultiBoxTracker tracker;
 
     private BorderedText borderedText;
+
+    private boolean isBeverage;
+    private boolean isFood;
+    private boolean isPen;
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
@@ -297,6 +302,12 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         final List<Classifier.Recognition> mappedRecognitions =
                                 new LinkedList<Classifier.Recognition>();
 
+                        List<String> detectedTitles = new ArrayList<>();
+
+                        for (int i = 0; i < results.size(); i++) {
+                            detectedTitles.add(results.get(i).getTitle());
+                        }
+
                         for (final Classifier.Recognition result : results) {
                             final RectF location = result.getLocation();
                             if (location != null && result.getConfidence() >= minimumConfidence) {
@@ -310,8 +321,35 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                                 SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
                                 Boolean isVibrate = preferences.getBoolean("isVibrate", false);
                                 if (isVibrate == false) {
-                                    tts.speak("얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
-                                    Log.d("MyTag", "얼룩명:" + result.getTitle());
+                                    isBeverage = false;
+                                    isFood = false;
+                                    isPen = false;
+                                    for (int i = 0; i < results.size(); i++) {
+                                        if (detectedTitles.get(i).equals("beverage")) isBeverage = true;
+                                        if (detectedTitles.get(i).equals("food")) isFood = true;
+                                        if (detectedTitles.get(i).equals("pen")) isPen = true;
+                                    }
+                                    if (isBeverage == true && isFood == true && isPen == true) {
+                                        tts.speak("음료 음식 펜 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == true && isFood == true && isPen == false) {
+                                        tts.speak("음료 음식 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == false && isFood == true &&  isPen == true) {
+                                        tts.speak("음식 펜 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == true && isFood == false && isPen == true) {
+                                        tts.speak("음료 펜 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == true && isFood == false && isPen == false) {
+                                        tts.speak("음료 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == false && isFood == true && isPen == false) {
+                                        tts.speak("음식 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
+                                    else if (isBeverage == false && isFood == false && isPen == true) {
+                                        tts.speak("펜 얼룩 감지",TextToSpeech.QUEUE_FLUSH,null,null);
+                                    }
                                 }
                                 else {
                                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
