@@ -60,58 +60,57 @@ public class SettingActivity extends AppCompatActivity {
         switchVibration = findViewById(R.id.switch_vibration);
         if (isVibrate == true) {
             switchVibration.setChecked(true);
-            switchVibration.setText("진동 ON");
+            switchVibration.setText("진동 안내");
         } else {
             switchVibration.setChecked(false);
-            switchVibration.setText("진동 OFF");
+            switchVibration.setText("음성 안내");
         }
         switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     isVibrate = true;
-                    switchVibration.setText("진동 ON");
+                    switchVibration.setText("진동 안내");
                 } else {
                     isVibrate = false;
-                    switchVibration.setText("진동 OFF");
+                    switchVibration.setText("음성 안내");
                 }
                 editor.putBoolean("isVibrate", isVibrate);
                 editor.apply();
             }
         });
 
-        contactButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ContactListFragment로 이동
-                ContactListFragment contactListFragment = new ContactListFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, contactListFragment); // 'fragment_container'는 프래그먼트를 표시할 레이아웃의 ID입니다.
-                transaction.addToBackStack(null); // 이전 프래그먼트로 돌아갈 수 있게 스택에 추가
-                transaction.commit(); // 트랜잭션 실행
+//        contactButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // ContactListFragment로 이동
+//                ContactListFragment contactListFragment = new ContactListFragment();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, contactListFragment); // 'fragment_container'는 프래그먼트를 표시할 레이아웃의 ID입니다.
+//                transaction.addToBackStack(null); // 이전 프래그먼트로 돌아갈 수 있게 스택에 추가
+//                transaction.commit(); // 트랜잭션 실행
+//
+//                // FAB 표시
+//                fabAddContact.setVisibility(View.VISIBLE);
+//            }
+//        });
 
-                // FAB 표시
-                fabAddContact.setVisibility(View.VISIBLE);
-            }
-        });
+//        fabAddContact.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 연락처 목록 화면으로 전환
+//                startActivity(new Intent(SettingActivity.this, ContactListFragment.class));
+//            }
+//        });
 
-        fabAddContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 연락처 목록 화면으로 전환
-                startActivity(new Intent(SettingActivity.this, ContactListFragment.class));
-            }
-        });
-
-        tmpAddButton = findViewById(R.id.tmp_button);
-        tmpAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 연락처 목록 화면으로 전환
-                startActivity(new Intent(SettingActivity.this, TmpContactActivity.class));
-            }
-        });
-
+//        tmpAddButton = findViewById(R.id.tmp_button);
+//        tmpAddButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 연락처 목록 화면으로 전환
+//                startActivity(new Intent(SettingActivity.this, TmpContactActivity.class));
+//            }
+//        });
     }
 
 }
