@@ -61,6 +61,7 @@
 
             <ImageButton
                 android:id="@+id/info_button"
+                android:contentDescription="질문과 답변 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
@@ -76,6 +77,7 @@
 
             <ImageButton
                 android:id="@+id/share_button"
+                android:contentDescription="사진촬영 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
@@ -91,6 +93,7 @@
 
             <ImageButton
                 android:id="@+id/setting_button"
+                android:contentDescription="설정 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"

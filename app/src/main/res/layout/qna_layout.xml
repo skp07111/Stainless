@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="질문과 답변"
+                android:contentDescription="질문과 답변"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
@@ -31,6 +32,7 @@
                 android:layout_gravity="end"
                 android:background="#309F70"
                 android:text="질문등록"
+                android:contentDescription="질문등록버튼"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp" />
 
@@ -53,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="질문: 어떻게 사용하나요?"
+                android:contentDescription="질문 어떻게 사용하나요?"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -61,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="얼룩이 묻은 것 같은 옷을 입은 채로 스마트폰 카메라로 천천히 이동하여 스캔합니다. 혹은 외출 전 입을 옷을 바닥에 펼쳐놓고 손으로 짚어가며 옷 전체에 얼룩이 있는지 확인합니다."
+                android:contentDescription="답변 얼룩이 묻은 것 같은 옷을 입은 채로 스마트폰 카메라로 천천히 이동하여 스캔합니다. 혹은 외출 전 입을 옷을 바닥에 펼쳐놓고 손으로 짚어가며 옷 전체에 얼룩이 있는지 확인합니다."
                 android:layout_marginBottom="16dp"
                 android:textColor="#000000"/>
 
@@ -75,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="질문: 얼룩을 어떤 기준으로 구분했나요?"
+                android:contentDescription="질문 얼룩을 어떤 기준으로 구분했나요?"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -83,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="일상생활에서 가장 자주 묻는 음식 얼룩, 음료 얼룩, 펜 얼룩 3가지로 구분했습니다. 수분이 적게 포함되어 진한 색을 띄는 점성이 높은 얼룩을 편의상 음식 얼룩이라고 표현하였습니다. 수분이 많이 포함되어 흐린색을 띄는 얼룩을 편의상 음료 얼룩이라고 표현하였습니다."
+                android:contentDescription="답변 일상생활에서 가장 자주 묻는 음식 얼룩, 음료 얼룩, 펜 얼룩 3가지로 구분했습니다. 수분이 적게 포함되어 진한 색을 띄는 점성이 높은 얼룩을 편의상 음식 얼룩이라고 표현하였습니다. 수분이 많이 포함되어 흐린색을 띄는 얼룩을 편의상 음료 얼룩이라고 표현하였습니다."
                 android:layout_marginBottom="16dp"
                 android:textColor="#000000"/>
 
@@ -97,6 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="질문: 각 얼룩은 무엇으로 지우나요?"
+                android:contentDescription="질문 각 얼룩은 무엇으로 지우나요?"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -105,6 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="김치 국물과 같은 음식 얼룩은 주방 세제로 지우는 것이 가장 효과적입니다. 커피와 같은 음료 얼룩은 식초와 탄산수로 지우는 것이 가장 효과적입니다. 펜 얼룩은 물파스로 지우는 것이 효과적입니다."
+                android:contentDescription="답변 김치 국물과 같은 음식 얼룩은 주방 세제로 지우는 것이 가장 효과적입니다. 커피와 같은 음료 얼룩은 식초와 탄산수로 지우는 것이 가장 효과적입니다. 펜 얼룩은 물파스로 지우는 것이 효과적입니다."
                 android:layout_marginBottom="16dp"
                 android:textColor="#000000"/>
             <View
