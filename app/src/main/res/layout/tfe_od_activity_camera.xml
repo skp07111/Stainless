@@ -113,7 +113,7 @@
             android:id="@+id/share_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="430dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="0dp"
             android:background="#ffffff"
             android:visibility="gone"
@@ -123,8 +123,8 @@
             <!-- Person 1 -->
             <ImageButton
                 android:id="@+id/person1"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/transparent"
@@ -139,16 +139,25 @@
                 android:id="@+id/person1_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="김진아"
+                android:text="이름1"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person1"
                 app:layout_constraintTop_toBottomOf="@id/person1" />
 
+            <TextView
+                android:id="@+id/person1_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="전화번호1"
+                app:layout_constraintStart_toStartOf="@id/person1"
+                app:layout_constraintTop_toBottomOf="@id/person1_name" />
+
             <!-- Person 2 -->
             <ImageButton
                 android:id="@+id/person2"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/transparent"
@@ -163,16 +172,25 @@
                 android:id="@+id/person2_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="박슬기"
+                android:text="이름2"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person2"
                 app:layout_constraintTop_toBottomOf="@id/person2" />
 
+            <TextView
+                android:id="@+id/person2_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전화번호2"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="@id/person2"
+                app:layout_constraintTop_toBottomOf="@id/person2_name" />
+
             <!-- Person 3 -->
             <ImageButton
                 android:id="@+id/person3"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/transparent"
@@ -187,10 +205,19 @@
                 android:id="@+id/person3_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이서영"
+                android:text="이름3"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/person3"
                 app:layout_constraintTop_toBottomOf="@id/person3" />
+
+            <TextView
+                android:id="@+id/person3_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전화번호3"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="@id/person3"
+                app:layout_constraintTop_toBottomOf="@id/person3_name" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

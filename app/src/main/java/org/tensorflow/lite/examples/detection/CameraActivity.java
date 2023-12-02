@@ -20,6 +20,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.hardware.Camera;
@@ -95,6 +96,8 @@ public abstract class CameraActivity extends AppCompatActivity
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
   private static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
   private static final String ASSET_PATH = "";
+  SharedPreferences preferences2;
+  SharedPreferences.Editor editor2;
   protected int previewWidth = 0;
   protected int previewHeight = 0;
   private boolean debug = false;
@@ -141,6 +144,12 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton person1;
   private ImageButton person2;
   private ImageButton person3;
+  private TextView person1_name;
+  private TextView person2_name;
+  private TextView person3_name;
+  private TextView person1_number;
+  private TextView person2_number;
+  private TextView person3_number;
 
   //연락처 추가
   private ImageButton add_button;
@@ -187,6 +196,31 @@ public abstract class CameraActivity extends AppCompatActivity
     person1 = findViewById(R.id.person1);
     person2 = findViewById(R.id.person2);
     person3 = findViewById(R.id.person3);
+    person1_name = findViewById(R.id.person1_name);
+    person2_name = findViewById(R.id.person2_name);
+    person3_name = findViewById(R.id.person3_name);
+    person1_number = findViewById(R.id.person1_phone);
+    person2_number = findViewById(R.id.person2_phone);
+    person3_number = findViewById(R.id.person3_phone);
+
+    preferences2 = getSharedPreferences("ContactPreferences", Context.MODE_PRIVATE);
+
+    // "contactCount" 키를 통해 저장된 연락처 개수를 가져옴
+    int contactCount = preferences2.getInt("contactCount", 0);
+
+    // "contactName_i"와 "contactNumber_i" 키를 통해 이름과 전화번호를 가져옴
+    String contactName1 = preferences2.getString("contactName_0", "");
+    String contactNumber1 = preferences2.getString("contactNumber_0", "");
+    String contactName2 = preferences2.getString("contactName_1", "");
+    String contactNumber2 = preferences2.getString("contactNumber_1", "");
+    String contactName3 = preferences2.getString("contactName_2", "");
+    String contactNumber3 = preferences2.getString("contactNumber_2", "");
+    person1_name.setText(contactName1);
+    person1_number.setText(contactNumber1);
+    person2_name.setText(contactName2);
+    person2_number.setText(contactNumber2);
+    person3_name.setText(contactName3);
+    person3_number.setText(contactNumber3);
 
 // TTS 초기화
     tts = new TextToSpeech(this, status -> {
