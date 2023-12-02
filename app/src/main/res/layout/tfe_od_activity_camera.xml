@@ -248,4 +248,29 @@
         app:layout_anchor="@+id/relativeLayout"
         app:layout_anchorGravity="center"
         tools:context="org.tensorflow.demo.CameraActivity" />
+    <!-- 버튼을 담을 컨테이너 -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone">
+    <!-- 새로운 '공유하기' 버튼 -->
+    <Button
+        android:id="@+id/newShareButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:text="공유하기" />
+
+    <!-- '취소' 버튼 -->
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:text="취소" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

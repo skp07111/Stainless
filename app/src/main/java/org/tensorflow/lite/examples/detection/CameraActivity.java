@@ -55,6 +55,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,6 +128,10 @@ public abstract class CameraActivity extends AppCompatActivity
   private ImageButton settingsButton;
   private boolean isPreviewPaused = false;
 
+  private Button newShareButton; // 새로운 '공유하기' 버튼
+  private Button cancelButton;
+
+
   //공유하기 버튼 클릭시 하단 탭 교체
   private ConstraintLayout bottomTabLayout;
   private ConstraintLayout shareTabLayout;
@@ -169,6 +174,8 @@ public abstract class CameraActivity extends AppCompatActivity
     infoButton = findViewById(R.id.info_button);
     shareButton = findViewById(R.id.share_button);
     settingsButton = findViewById(R.id.setting_button);
+    newShareButton = findViewById(R.id.newShareButton);
+    cancelButton = findViewById(R.id.cancelButton);
 
     // 하단 탭 버튼 클릭시 화면 교체
     bottomTabLayout = findViewById(R.id.bottom_tab_layout);
@@ -236,37 +243,14 @@ public abstract class CameraActivity extends AppCompatActivity
 
     });
 
-// '공유하기' 버튼 생성
-    Button shareButton = new Button(this);
-    shareButton.setText("공유하기");
-
-    // 버튼의 레이아웃 파라미터 설정
-    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT);
-
-    // 버튼을 중앙에 배치하기 위한 설정
-    params.gravity = Gravity.CENTER;
-
     shareButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         // 카메라 미리보기 정지
         pauseCameraPreview();
-
         // 현재 프레임을 이미지로 저장
         takePicture();
-
-        // 공유하기 기능 구현
-        shareImage();
-
-
-        // 기존 하단 탭 숨기기
-        bottomTabLayout.setVisibility(View.GONE);
-        // 새로운 공유하기 탭 표시
-        shareTabLayout.setVisibility(View.VISIBLE);
       }
-
 
       // 카메라 미리보기 일시 정지
       private void pauseCameraPreview() {
@@ -278,6 +262,10 @@ public abstract class CameraActivity extends AppCompatActivity
       }
       // 이미지를 캡처하고 저장하는 메서드
       private void takePicture() {
+        //공유하기/취소 버튼 생성
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.VISIBLE);
+
         // 카메라 이미지 캡처 로직 구현
         if (camera != null) {
           camera.takePicture(null, null, new Camera.PictureCallback() {
@@ -291,7 +279,6 @@ public abstract class CameraActivity extends AppCompatActivity
             }
           });
         }
-
       }
       private void saveImageToFile(byte[] data) {
         File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
@@ -332,14 +319,30 @@ public abstract class CameraActivity extends AppCompatActivity
 
         return mediaFile;
       }
+    });
 
-      // 이미지를 공유하는 메서드
-      private void shareImage() {
-        // 이미지 공유 로직 구현
+    newShareButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 기존 하단 탭 숨기기
+        bottomTabLayout.setVisibility(View.GONE);
+        // 새로운 공유하기 탭 표시
+        shareTabLayout.setVisibility(View.VISIBLE);
       }
     });
-    // 미리보기 레이아웃에 버튼 추가
-    previewLayout.addView(shareButton, params);
+
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        //공유하기/취소 버튼 제거
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.GONE);
+        bottomTabLayout.setVisibility(View.VISIBLE);
+        shareTabLayout.setVisibility(View.GONE);
+      }
+    });
+
+
     settingsButton.setOnClickListener(v -> startActivity(new Intent(CameraActivity.this, SettingActivity.class)));
 
     person1.setOnClickListener(new View.OnClickListener() {
@@ -352,6 +355,8 @@ public abstract class CameraActivity extends AppCompatActivity
         if (tts != null) {
           tts.speak("김진아님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
         }
+        bottomTabLayout.setVisibility(View.VISIBLE);
+        shareTabLayout.setVisibility(View.GONE);
       }
     });
     person2.setOnClickListener(new View.OnClickListener() {
@@ -364,6 +369,8 @@ public abstract class CameraActivity extends AppCompatActivity
         if (tts != null) {
           tts.speak("박슬기님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
         }
+        bottomTabLayout.setVisibility(View.VISIBLE);
+        shareTabLayout.setVisibility(View.GONE);
       }
     });
     person3.setOnClickListener(new View.OnClickListener() {
@@ -376,6 +383,8 @@ public abstract class CameraActivity extends AppCompatActivity
         if (tts != null) {
           tts.speak("이서영님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
         }
+        bottomTabLayout.setVisibility(View.VISIBLE);
+        shareTabLayout.setVisibility(View.GONE);
       }
     });
 
@@ -392,8 +401,6 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
-
-
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -403,7 +410,6 @@ public abstract class CameraActivity extends AppCompatActivity
     } else {
       requestPermission();
     }
-
 
     threadsTextView = findViewById(R.id.threads);
     currentNumThreads = Integer.parseInt(threadsTextView.getText().toString().trim());
