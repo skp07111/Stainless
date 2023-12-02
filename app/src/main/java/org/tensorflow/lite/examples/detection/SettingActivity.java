@@ -1,12 +1,5 @@
 package org.tensorflow.lite.examples.detection;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -27,7 +20,11 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,13 +104,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         switchVibration = findViewById(R.id.switch_vibration);
-        if (isVibrate == true) {
-            switchVibration.setChecked(true);
-            switchVibration.setText("진동 안내");
-        } else {
-            switchVibration.setChecked(false);
-            switchVibration.setText("음성 안내");
-        }
+
         switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
