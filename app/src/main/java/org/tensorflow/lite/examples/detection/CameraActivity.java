@@ -252,73 +252,7 @@ public abstract class CameraActivity extends AppCompatActivity
         takePicture();
       }
 
-      // 카메라 미리보기 일시 정지
-      private void pauseCameraPreview() {
-        isPreviewPaused = true;
-      }
-      // 카메라 미리보기 재개
-      private void resumeCameraPreview() {
-        isPreviewPaused = false;
-      }
-      // 이미지를 캡처하고 저장하는 메서드
-      private void takePicture() {
-        //공유하기/취소 버튼 생성
-        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
-        buttonContainer.setVisibility(View.VISIBLE);
 
-        // 카메라 이미지 캡처 로직 구현
-        if (camera != null) {
-          camera.takePicture(null, null, new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-              // 사진 데이터를 처리합니다. 예를 들어, 파일로 저장할 수 있습니다.
-              saveImageToFile(data);
-
-              // 필요한 경우 카메라 미리보기를 다시 시작합니다.
-              camera.startPreview();
-            }
-          });
-        }
-      }
-      private void saveImageToFile(byte[] data) {
-        File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
-        if (pictureFile == null) {
-          Log.d("Camera", "Error creating media file, check storage permissions");
-          return;
-        }
-
-        try {
-          FileOutputStream fos = new FileOutputStream(pictureFile);
-          fos.write(data);
-          fos.close();
-        } catch (FileNotFoundException e) {
-          Log.d("Camera", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-          Log.d("Camera", "Error accessing file: " + e.getMessage());
-        }
-      }
-      /** 이미지를 저장할 파일 객체를 생성합니다. */
-      private File getOutputMediaFile() {
-        // 이미지 저장 경로 설정 (예: 외부 저장소의 Pictures 디렉토리)
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
-
-        // 디렉토리가 없다면 생성합니다.
-        if (!mediaStorageDir.exists()) {
-          if (!mediaStorageDir.mkdirs()) {
-            Log.d("MyCameraApp", "failed to create directory");
-            return null;
-          }
-        }
-
-        // 이미지 파일 이름 생성
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
-
-        return mediaFile;
-      }
     });
 
     newShareButton.setOnClickListener(new View.OnClickListener() {
@@ -511,7 +445,73 @@ public abstract class CameraActivity extends AppCompatActivity
     minusImageView.setOnClickListener(this);
 
   }
+  // 카메라 미리보기 일시 정지
+  private void pauseCameraPreview() {
+    isPreviewPaused = true;
+  }
+  // 카메라 미리보기 재개
+  private void resumeCameraPreview() {
+    isPreviewPaused = false;
+  }
+  // 이미지를 캡처하고 저장하는 메서드
+  private void takePicture() {
+    //공유하기/취소 버튼 생성
+    LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+    buttonContainer.setVisibility(View.VISIBLE);
 
+    // 카메라 이미지 캡처 로직 구현
+    if (camera != null) {
+      camera.takePicture(null, null, new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+          // 사진 데이터를 처리합니다. 예를 들어, 파일로 저장할 수 있습니다.
+          saveImageToFile(data);
+
+          // 필요한 경우 카메라 미리보기를 다시 시작합니다.
+          camera.startPreview();
+        }
+      });
+    }
+  }
+  private void saveImageToFile(byte[] data) {
+    File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
+    if (pictureFile == null) {
+      Log.d("Camera", "Error creating media file, check storage permissions");
+      return;
+    }
+
+    try {
+      FileOutputStream fos = new FileOutputStream(pictureFile);
+      fos.write(data);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.d("Camera", "File not found: " + e.getMessage());
+    } catch (IOException e) {
+      Log.d("Camera", "Error accessing file: " + e.getMessage());
+    }
+  }
+  /** 이미지를 저장할 파일 객체를 생성합니다. */
+  private File getOutputMediaFile() {
+    // 이미지 저장 경로 설정 (예: 외부 저장소의 Pictures 디렉토리)
+    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES), "MyCameraApp");
+
+    // 디렉토리가 없다면 생성합니다.
+    if (!mediaStorageDir.exists()) {
+      if (!mediaStorageDir.mkdirs()) {
+        Log.d("MyCameraApp", "failed to create directory");
+        return null;
+      }
+    }
+
+    // 이미지 파일 이름 생성
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    File mediaFile;
+    mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+            "IMG_" + timeStamp + ".jpg");
+
+    return mediaFile;
+  }
   protected ArrayList<String> getModelStrings(AssetManager mgr, String path){
     ArrayList<String> res = new ArrayList<String>();
     try {
