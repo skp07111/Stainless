@@ -124,7 +124,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   //메인홈 버튼
   private ImageButton infoButton;
-  private ImageButton shareButton;
+  private ImageButton filmButton; // 촬영 버튼
   private ImageButton settingsButton;
   private boolean isPreviewPaused = false;
 
@@ -181,7 +181,7 @@ public abstract class CameraActivity extends AppCompatActivity
     setContentView(R.layout.tfe_od_activity_camera);
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
-    shareButton = findViewById(R.id.share_button);
+    filmButton = findViewById(R.id.share_button); // 촬영 버튼
     settingsButton = findViewById(R.id.setting_button);
     newShareButton = findViewById(R.id.newShareButton);
     cancelButton = findViewById(R.id.cancelButton);
@@ -277,7 +277,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
     });
 
-    shareButton.setOnClickListener(new View.OnClickListener() {
+    filmButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         // 카메라 미리보기 정지
