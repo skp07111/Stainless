@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -43,7 +44,9 @@ public class SettingActivity extends AppCompatActivity {
 
     private Boolean isVibrate = false;
     SharedPreferences preferences;
+    SharedPreferences preferences2;
     SharedPreferences.Editor editor;
+    SharedPreferences.Editor editor2;
 
     private List<ContactModel> contactList;
     private ContactAdapter contactAdapter;
@@ -71,7 +74,6 @@ public class SettingActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.back_button);
         contactButton = findViewById(R.id.contact_button);
-        // FloatingActionButton fabAddContact = findViewById(R.id.fab_add_contact);
 
         // TTS 초기화
         tts = new TextToSpeech(this, status -> {
@@ -139,22 +141,7 @@ public class SettingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(contactAdapter);
 
-//        fabAddContact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 연락처 목록 화면으로 전환
-//                startActivity(new Intent(SettingActivity.this, ContactListFragment.class));
-//            }
-//        });
-
-//        tmpAddButton = findViewById(R.id.tmp_button);
-//        tmpAddButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 연락처 목록 화면으로 전환
-//                startActivity(new Intent(SettingActivity.this, TmpContactActivity.class));
-//            }
-//        });
+        loadContactList(); // SharedPreference로 저장된 데이터 불러오기
     }
     private void pickContact() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
@@ -194,12 +181,16 @@ public class SettingActivity extends AppCompatActivity {
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 Log.d("ContactDetails", "Phone Number: " + phoneNumber);
 
-                // RecyclerView에 연락처 추가
-                contactList.add(new ContactModel(displayName, phoneNumber));
-                contactAdapter.notifyDataSetChanged();
-
-                // 저장 메서드 호출
-                saveContact(displayName, phoneNumber);
+                if (contactList.size() < 3) {
+                    // RecyclerView에 연락처 추가
+                    contactList.add(new ContactModel(displayName, phoneNumber));
+                    contactAdapter.notifyDataSetChanged();
+                    // 저장 메서드 호출
+                    saveContact(displayName, phoneNumber);
+                }
+                else {
+                    Toast.makeText(this, "연락처는 최대 3개까지 등록할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                }
 
                 phoneCursor.close();
             }
@@ -223,17 +214,17 @@ public class SettingActivity extends AppCompatActivity {
         loadContactList();
     }
 
-    private void loadContactList() {// SharedPreferences에서 저장된 데이터 불러오기
-        preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+    private void loadContactList() { // SharedPreferences에서 저장된 데이터 불러오기
+        preferences2 = getSharedPreferences("ContactPreferences", Context.MODE_PRIVATE);
 
         // "contactCount" 키를 통해 저장된 연락처 개수를 가져옴
-        int contactCount = preferences.getInt("contactCount", 0);
+        int contactCount = preferences2.getInt("contactCount", 0);
 
         // 저장된 연락처 정보를 반복문을 통해 불러와서 RecyclerView에 추가
         for (int i = 0; i < contactCount; i++) {
             // "contactName_i"와 "contactNumber_i" 키를 통해 이름과 전화번호를 가져옴
-            String contactName = preferences.getString("contactName_" + i, "");
-            String contactNumber = preferences.getString("contactNumber_" + i, "");
+            String contactName = preferences2.getString("contactName_" + i, "");
+            String contactNumber = preferences2.getString("contactNumber_" + i, "");
 
             // 가져온 연락처 정보를 RecyclerView에 추가
             contactList.add(new ContactModel(contactName, contactNumber));
@@ -245,23 +236,22 @@ public class SettingActivity extends AppCompatActivity {
 
     // 연락처 정보를 저장하는 메서드
     private void saveContact(String name, String number) {
+
         // SharedPreferences에 데이터 저장
-        preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        preferences2 = getSharedPreferences("ContactPreferences", Context.MODE_PRIVATE);
+        editor2 = preferences2.edit();
 
         // 현재 저장된 연락처 개수를 가져옴
-        int contactCount = preferences.getInt("contactCount", 0);
+        int contactCount = preferences2.getInt("contactCount", 0);
 
-        // "contactName_i"와 "contactNumber_i" 키를 통해 이름과 전화번호를 저장
-        editor.putString("contactName_" + contactCount, name);
-        editor.putString("contactNumber_" + contactCount, number);
-
-        // 저장된 연락처 개수를 증가시킴
-        editor.putInt("contactCount", contactCount + 1);
-
+        if (contactCount < 3) {
+            // "contactName_i"와 "contactNumber_i" 키를 통해 이름과 전화번호를 저장
+            editor2.putString("contactName_" + contactCount, name);
+            editor2.putString("contactNumber_" + contactCount, number);
+            // 저장된 연락처 개수를 증가시킴
+            editor2.putInt("contactCount", contactCount + 1);
+        }
         // 변경사항을 반영
-        editor.apply();
+        editor2.apply();
     }
-
-
 }
