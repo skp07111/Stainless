@@ -42,7 +42,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -56,7 +55,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +62,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -153,6 +150,9 @@ public abstract class CameraActivity extends AppCompatActivity
 
   //연락처 추가
   private ImageButton add_button;
+
+  SharedPreferences preferences;
+  SharedPreferences.Editor editor;
 
   @Override
   public void onBackPressed() {
@@ -319,10 +319,7 @@ public abstract class CameraActivity extends AppCompatActivity
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
 
-        // TTS를 사용하여 음성 메시지 재생
-        if (tts != null) {
-          tts.speak("김진아님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
-        }
+
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
@@ -333,10 +330,7 @@ public abstract class CameraActivity extends AppCompatActivity
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
 
-        // TTS를 사용하여 음성 메시지 재생
-        if (tts != null) {
-          tts.speak("박슬기님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
-        }
+
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
@@ -347,10 +341,6 @@ public abstract class CameraActivity extends AppCompatActivity
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
 
-        // TTS를 사용하여 음성 메시지 재생
-        if (tts != null) {
-          tts.speak("이서영님께 메세지를 보냈습니다", TextToSpeech.QUEUE_FLUSH, null, null);
-        }
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
