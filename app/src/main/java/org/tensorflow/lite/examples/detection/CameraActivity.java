@@ -284,6 +284,8 @@ public abstract class CameraActivity extends AppCompatActivity
         pauseCameraPreview();
         // 현재 프레임을 이미지로 저장
         takePicture();
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.VISIBLE);
       }
 
 
@@ -318,8 +320,8 @@ public abstract class CameraActivity extends AppCompatActivity
       public void onClick(View v) {
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
-
-
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
@@ -329,8 +331,8 @@ public abstract class CameraActivity extends AppCompatActivity
       public void onClick(View v) {
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
-
-
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
@@ -340,7 +342,8 @@ public abstract class CameraActivity extends AppCompatActivity
       public void onClick(View v) {
         // 토스트 메시지 표시
         Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
-
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
       }
