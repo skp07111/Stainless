@@ -774,7 +774,7 @@ public abstract class CameraActivity extends AppCompatActivity
                         Toast.LENGTH_LONG)
                 .show();
       }
-      //    requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
+      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
     }
   }
 
