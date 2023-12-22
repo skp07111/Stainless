@@ -294,10 +294,10 @@ public abstract class CameraActivity extends AppCompatActivity
     newShareButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // 기존 하단 탭 숨기기
-        bottomTabLayout.setVisibility(View.GONE);
-        // 새로운 공유하기 탭 표시
-        shareTabLayout.setVisibility(View.VISIBLE);
+//        // 기존 하단 탭 숨기기
+//        bottomTabLayout.setVisibility(View.GONE);
+//        // 새로운 공유하기 탭 표시
+//        shareTabLayout.setVisibility(View.VISIBLE);
       }
     });
 
