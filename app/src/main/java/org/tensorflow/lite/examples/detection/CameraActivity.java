@@ -124,7 +124,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   //메인홈 버튼
   private ImageButton infoButton;
-  private ImageButton filmButton; // 촬영 버튼
+  // private ImageButton filmButton; // 촬영 버튼
   private ImageButton settingsButton;
   private boolean isPreviewPaused = false;
 
@@ -181,7 +181,7 @@ public abstract class CameraActivity extends AppCompatActivity
     setContentView(R.layout.tfe_od_activity_camera);
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
-    filmButton = findViewById(R.id.share_button); // 촬영 버튼
+    // filmButton = findViewById(R.id.share_button); // 촬영 버튼
     settingsButton = findViewById(R.id.setting_button);
     newShareButton = findViewById(R.id.newShareButton);
     cancelButton = findViewById(R.id.cancelButton);
@@ -277,19 +277,19 @@ public abstract class CameraActivity extends AppCompatActivity
 
     });
 
-    filmButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        // 카메라 미리보기 정지
-        pauseCameraPreview();
-        // 현재 프레임을 이미지로 저장
-        takePicture();
-        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
-        buttonContainer.setVisibility(View.VISIBLE);
-      }
-
-
-    });
+//    filmButton.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        // 카메라 미리보기 정지
+//        pauseCameraPreview();
+//        // 현재 프레임을 이미지로 저장
+//        takePicture();
+//        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+//        buttonContainer.setVisibility(View.VISIBLE);
+//      }
+//
+//
+//    });
 
     newShareButton.setOnClickListener(new View.OnClickListener() {
       @Override
