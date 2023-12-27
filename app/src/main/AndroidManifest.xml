@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+<!--    <uses-permission android:name="android.permission.SEND_SMS"/>-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-feature android:name="android.hardware.camera" />
@@ -32,7 +32,7 @@
         android:installLocation="internalOnly">
 
         <activity
-            android:name=".DetectorActivity"
+            android:name="stainless.tensorflow.lite.examples.detection.DetectorActivity"
             android:label="@string/tfe_od_app_name"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -43,19 +43,19 @@
         </activity>
 
         <activity
-            android:name=".SettingActivity"
+            android:name="stainless.tensorflow.lite.examples.detection.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".QnaActivity"
+            android:name="stainless.tensorflow.lite.examples.detection.QnaActivity"
             android:exported="false"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".TmpContactActivity"
+            android:name="stainless.tensorflow.lite.examples.detection.TmpContactActivity"
             android:exported="false"
             android:screenOrientation="portrait">
         </activity>

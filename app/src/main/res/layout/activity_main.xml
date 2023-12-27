@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="org.tensorflow.lite.examples.detection.stainless.tensorflow.lite.examples.detection.MainActivity">
 
 
     <Button
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/kite" />
 
-    <org.tensorflow.lite.examples.detection.customview.OverlayView
+    <stainless.tensorflow.lite.examples.detection.customview.OverlayView
         android:id="@+id/tracking_overlay"
         android:layout_width="416dp"
         android:layout_height="416dp"
