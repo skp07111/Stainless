@@ -93,6 +93,10 @@ public abstract class CameraActivity extends AppCompatActivity
   private static final int PERMISSIONS_REQUEST = 1;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+  private static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+  private static final int PERMISSION_REQUEST_SMS = 2; // 아무 정수나 사용 가능하며 중복되지 않아야 합니다.
+  private static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
+
   private static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
   private static final String ASSET_PATH = "";
   SharedPreferences preferences2;
@@ -126,7 +130,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   //메인홈 버튼
   private ImageButton infoButton;
-  // private ImageButton filmButton; // 촬영 버튼
+  private ImageButton filmButton; // 촬영 버튼
   private ImageButton settingsButton;
   private boolean isPreviewPaused = false;
 
@@ -183,7 +187,7 @@ public abstract class CameraActivity extends AppCompatActivity
     setContentView(R.layout.tfe_od_activity_camera);
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
-    // filmButton = findViewById(R.id.share_button); // 촬영 버튼
+    filmButton = findViewById(R.id.share_button); // 촬영 버튼
     settingsButton = findViewById(R.id.setting_button);
     newShareButton = findViewById(R.id.newShareButton);
     cancelButton = findViewById(R.id.cancelButton);
@@ -279,27 +283,26 @@ public abstract class CameraActivity extends AppCompatActivity
 
     });
 
-//    filmButton.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        // 카메라 미리보기 정지
-//        pauseCameraPreview();
-//        // 현재 프레임을 이미지로 저장
-//        takePicture();
-//        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
-//        buttonContainer.setVisibility(View.VISIBLE);
-//      }
-//
-//
-//    });
+    filmButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 카메라 미리보기 정지
+        pauseCameraPreview();
+        // 현재 프레임을 이미지로 저장(디렉토리 생성, 이미지파일 생성 및 저장)
+        takePicture();
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        buttonContainer.setVisibility(View.VISIBLE);
+      }
+
+    });
 
     newShareButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-//        // 기존 하단 탭 숨기기
-//        bottomTabLayout.setVisibility(View.GONE);
-//        // 새로운 공유하기 탭 표시
-//        shareTabLayout.setVisibility(View.VISIBLE);
+        // 기존 하단 탭 숨기기
+        bottomTabLayout.setVisibility(View.GONE);
+        // 새로운 공유하기 탭 표시
+        shareTabLayout.setVisibility(View.VISIBLE);
       }
     });
 
@@ -311,6 +314,8 @@ public abstract class CameraActivity extends AppCompatActivity
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
+        //카메라 재개
+        resumeCameraPreview();
       }
     });
 
@@ -356,11 +361,7 @@ public abstract class CameraActivity extends AppCompatActivity
     add_button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // 연락처 버튼을 누르면 현재 등록되어있는 사람 3명이 리스트로 뜨고, 아래의 +버튼을 누르면 연락처를 불러오기
-        // 사용자의 연락처에 접근하여 목록을 받아오고, 새로추가 혹은 등록할사람 선택 후 확인버튼을 누르면 다시 리스트로 화면전환
-        // 여기서 이미 등록되었는데 제거하고싶은 사람은... 나중에 구현하기
-
-
+        // 등록된 번호 제거기능 추가하기
       }
     });
 
@@ -475,29 +476,34 @@ public abstract class CameraActivity extends AppCompatActivity
 
   }
   // 카메라 미리보기 일시 정지
+//  private void pauseCameraPreview() {
+//    isPreviewPaused = true;
+//  }
   private void pauseCameraPreview() {
-    isPreviewPaused = true;
+    Log.d("Camera", "pauseCameraPreview() called. isProcessingFrame: " + isProcessingFrame+" isProcessingFrame: "+isPreviewPaused);
+    isProcessingFrame = true; // 프레임을 더 이상 처리하지 않도록 설정
+    isPreviewPaused = true;    // 정지 상태로 설정
   }
   // 카메라 미리보기 재개
+//  private void resumeCameraPreview() {
+//    isPreviewPaused = false;
+//  }
   private void resumeCameraPreview() {
-    isPreviewPaused = false;
+    isProcessingFrame = false; // 프레임 처리를 다시 시작하도록 설정
+    isPreviewPaused = false;    // 정지 상태 해제
   }
+
   // 이미지를 캡처하고 저장하는 메서드
   private void takePicture() {
-    //공유하기/취소 버튼 생성
-    LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
-    buttonContainer.setVisibility(View.VISIBLE);
-
     // 카메라 이미지 캡처 로직 구현
     if (camera != null) {
       camera.takePicture(null, null, new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-          // 사진 데이터를 처리합니다. 예를 들어, 파일로 저장할 수 있습니다.
+          // 사진 데이터 파일로 저장
           saveImageToFile(data);
-
-          // 필요한 경우 카메라 미리보기를 다시 시작합니다.
-          camera.startPreview();
+          // 카메라 미리보기 다시 시작
+//          camera.startPreview();
         }
       });
     }
@@ -505,7 +511,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private void saveImageToFile(byte[] data) {
     File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
     if (pictureFile == null) {
-      Log.d("Camera", "Error creating media file, check storage permissions");
+      Log.d("Stainless", "Error creating media file, check storage permissions");
       return;
     }
 
@@ -514,21 +520,21 @@ public abstract class CameraActivity extends AppCompatActivity
       fos.write(data);
       fos.close();
     } catch (FileNotFoundException e) {
-      Log.d("Camera", "File not found: " + e.getMessage());
+      Log.d("Stainless", "File not found: " + e.getMessage());
     } catch (IOException e) {
-      Log.d("Camera", "Error accessing file: " + e.getMessage());
+      Log.d("Stainless", "Error accessing file: " + e.getMessage());
     }
   }
   /** 이미지를 저장할 파일 객체를 생성합니다. */
   private File getOutputMediaFile() {
-    // 이미지 저장 경로 설정 (예: 외부 저장소의 Pictures 디렉토리)
+    // 이미지 저장 경로 설정 (예: 외부 저장소의 디렉토리)
     File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES), "MyCameraApp");
+            Environment.DIRECTORY_PICTURES), "Stainless");
 
     // 디렉토리가 없다면 생성합니다.
     if (!mediaStorageDir.exists()) {
       if (!mediaStorageDir.mkdirs()) {
-        Log.d("MyCameraApp", "failed to create directory");
+        Log.d("Stainless", "failed to create directory");
         return null;
       }
     }
@@ -576,6 +582,7 @@ public abstract class CameraActivity extends AppCompatActivity
   @Override
   public void onPreviewFrame(final byte[] bytes, final Camera camera) {
     if (isProcessingFrame|| isPreviewPaused) {
+
       LOGGER.w("Dropping frame!");
       return;
     }
@@ -776,7 +783,7 @@ public abstract class CameraActivity extends AppCompatActivity
                         Toast.LENGTH_LONG)
                 .show();
       }
-      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS}, PERMISSIONS_REQUEST);
+      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSION_SMS}, PERMISSIONS_REQUEST);
     }
   }
 

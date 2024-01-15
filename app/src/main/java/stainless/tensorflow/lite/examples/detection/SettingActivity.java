@@ -165,8 +165,8 @@ public class SettingActivity extends AppCompatActivity {
         Cursor cursor = contentResolver.query(contactUri, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+            @SuppressLint("Range") String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            @SuppressLint("Range") String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
             Log.d("ContactDetails", "Name: " + displayName);
 
@@ -180,7 +180,7 @@ public class SettingActivity extends AppCompatActivity {
             );
 
             if (phoneCursor != null && phoneCursor.moveToFirst()) {
-                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                @SuppressLint("Range") String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 Log.d("ContactDetails", "Phone Number: " + phoneNumber);
 
                 if (contactList.size() < 3) {
