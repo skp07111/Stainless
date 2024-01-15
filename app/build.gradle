@@ -21,20 +21,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    aaptOptions {
-        noCompress "tflite"
-    }
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
-    }
-    lintOptions {
-        abortOnError false
     }
     task wrapper(type: Wrapper) {
         gradleVersion = '7.0'
     }
     namespace 'org.tensorflow.lite.examples.detection'
+    androidResources {
+        noCompress 'tflite'
+    }
+    lint {
+        abortOnError false
+    }
 }
 
 // import DownloadModels task
