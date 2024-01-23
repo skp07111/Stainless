@@ -214,6 +214,15 @@ public class SettingActivity extends AppCompatActivity {
 
         // 저장된 연락처 정보 불러오기
         loadContactList();
+
+        // RecyclerView의 아이템 클릭 이벤트 처리
+        contactAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                // 삭제 버튼 클릭 시 해당 위치의 연락처 삭제
+                deleteContact(position);
+            }
+        });
     }
 
     private void loadContactList() { // SharedPreferences에서 저장된 데이터 불러오기
@@ -255,5 +264,39 @@ public class SettingActivity extends AppCompatActivity {
         }
         // 변경사항을 반영
         editor2.apply();
+    }
+
+    private void deleteContact(int position) {
+        // 삭제할 연락처 정보 가져오기
+        ContactModel deletedContact = contactList.get(position);
+
+        // SharedPreferences에서 삭제
+        preferences2 = getSharedPreferences("ContactPreferences", Context.MODE_PRIVATE);
+        editor2 = preferences2.edit();
+
+        // "contactCount" 키를 통해 저장된 연락처 개수를 가져옴
+        int contactCount = preferences2.getInt("contactCount", 0);
+
+        // 삭제할 연락처의 위치 이후의 연락처들을 앞으로 당기기
+        for (int i = position; i < contactCount - 1; i++) {
+            String nextName = preferences2.getString("contactName_" + (i + 1), "");
+            String nextNumber = preferences2.getString("contactNumber_" + (i + 1), "");
+            editor2.putString("contactName_" + i, nextName);
+            editor2.putString("contactNumber_" + i, nextNumber);
+        }
+
+        // 마지막 위치에 있던 연락처 정보 삭제
+        editor2.remove("contactName_" + (contactCount - 1));
+        editor2.remove("contactNumber_" + (contactCount - 1));
+
+        // 저장된 연락처 개수 감소
+        editor2.putInt("contactCount", contactCount - 1);
+
+        // 변경사항을 반영
+        editor2.apply();
+
+        // RecyclerView에서도 삭제
+        contactList.remove(position);
+        contactAdapter.notifyItemRemoved(position);
     }
 }
