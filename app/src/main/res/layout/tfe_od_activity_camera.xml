@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:background="#00000000">
 
-    <TextureView
+    <stainless.tensorflow.lite.examples.detection.customview.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -100,10 +100,11 @@ public class CameraConnectionFragment extends Fragment {
   private final OnImageAvailableListener imageListener;
   private final Size inputSize;
   private final int layout;
-  private TextureView textureView;
+  private AutoFitTextureView textureView;
   private CameraCaptureSession previewSession;
   private CaptureRequest previewRequest;
   private CameraDevice cameraDevice;
+  private CameraCharacteristics characteristics;
   private Integer sensorOrientation;
   private Size previewSize;
   private HandlerThread backgroundThread;
@@ -138,16 +139,23 @@ public class CameraConnectionFragment extends Fragment {
           };
 
   private void openCamera(final int width, final int height) {
-    final Activity activity = getActivity();
-    final CameraManager manager = (CameraManager)activity.getSystemService(Context.CAMERA_SERVICE);
-    Log.e("TEST", "openCamera E");
     try {
-      CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+      final Activity activity = getActivity();
+      final CameraManager manager = (CameraManager)activity.getSystemService(Context.CAMERA_SERVICE);
+      Log.e("TEST", "openCamera E");
+      String[] cameraIds = manager.getCameraIdList();
+      for (String id : cameraIds) {
+        if (manager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK) { // 카메라의 특성이 후면 카메라일 경우
+          cameraId = id;
+          characteristics = manager.getCameraCharacteristics(cameraId); // characteristics 초기화
+          break;
+        }
+      }
       StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
       Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
       previewSize = previewSizes[0];// 해상도 설정 (4032 * 3024)
       manager.openCamera(cameraId, stateCallback, null);
-      Log.e("TEST", "openCamera X:"+previewSize.getWidth() + previewSize.getHeight());
+      Log.e("TEST", "openCamera X:" + previewSize.getWidth() + previewSize.getHeight());
     } catch (final CameraAccessException e) {
       e.printStackTrace();
     }
@@ -442,7 +450,7 @@ public class CameraConnectionFragment extends Fragment {
 
   @Override
   public void onViewCreated(final View view, final Bundle savedInstanceState) {
-    textureView = (TextureView) view.findViewById(R.id.texture);
+    textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     filmButton = view.findViewById(R.id.share_button);
 
     //filmButton.setOnClickListener(v->takePicture());

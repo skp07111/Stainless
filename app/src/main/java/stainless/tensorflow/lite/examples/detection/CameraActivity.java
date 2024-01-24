@@ -183,8 +183,8 @@ public abstract class CameraActivity extends AppCompatActivity
     LOGGER.d("onCreate " + this);
     super.onCreate(savedInstanceState);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
     setContentView(R.layout.tfe_od_activity_camera);
+
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
     filmButton = findViewById(R.id.share_button); // 촬영 버튼

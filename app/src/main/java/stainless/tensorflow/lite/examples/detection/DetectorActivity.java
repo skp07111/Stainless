@@ -80,7 +80,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private YoloV5Classifier detector;
 
     private long lastProcessingTimeMs;
-    private Bitmap rgbFrameBitmap = null;
+    private Bitmap rgbFrameBitmap;
     private Bitmap croppedBitmap = null;
     private Bitmap cropCopyBitmap = null;
 
@@ -103,6 +103,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tfe_od_activity_camera);
         trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
+        onPreviewSizeChosen(new Size(4032, 3024),90);
     }
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
@@ -141,8 +142,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         LOGGER.i("Camera orientation relative to screen canvas: %d", sensorOrientation);
         Log.d("device!!", deviceString );
         LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
-        rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888);
+
         croppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Config.ARGB_8888);
+        rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888);
 
         frameToCropTransform =
                 ImageUtils.getTransformationMatrix(
@@ -251,8 +253,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         }
         computingDetection = true;
         LOGGER.i("Preparing image " + currTimestamp + " for detection in bg thread.");
-
-        rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
+        if (rgbFrameBitmap != null) {
+            rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
+        } else {
+            Log.e("test","rgb가 null");
+        }
         readyForNextImage();
 
         final Canvas canvas = new Canvas(croppedBitmap);
