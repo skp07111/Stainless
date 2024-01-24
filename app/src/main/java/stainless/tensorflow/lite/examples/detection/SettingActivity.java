@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +34,6 @@ import java.util.Locale;
 
 
 public class SettingActivity extends AppCompatActivity {
-    private TextToSpeech tts;
     private static final int PICK_CONTACT_REQUEST = 1;
 
     private static final int READ_CONTACTS_PERMISSION_REQUEST_CODE = 1;
@@ -77,28 +75,11 @@ public class SettingActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         contactButton = findViewById(R.id.contact_button);
 
-        // TTS 초기화
-        tts = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                int result = tts.setLanguage(Locale.KOREAN);
-                if (result != TextToSpeech.LANG_MISSING_DATA && result != TextToSpeech.LANG_NOT_SUPPORTED) {
-                    // TTS 준비 완료, 버튼 클릭 리스너에서 TTS 사용 가능
-                    // 언어 데이터 누락이나 지원하지 않는 언어일 경우 에러 처리
-                }
-            } else {
-                // 초기화 실패 처리
-            }
-        });
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 버튼이 클릭되면 다음 액티비티로 이동
                 Intent intent = new Intent(SettingActivity.this, DetectorActivity.class);
-
-                if (tts != null) {
-                    tts.speak("이전 화면으로", TextToSpeech.QUEUE_FLUSH, null, null);
-                }
 
                 // 값을 전달하기 위해 putExtra 사용
                 // intent.putExtra("isVibrate", isVibrate);
@@ -114,16 +95,8 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     isVibrate = true;
-                    switchVibration.setText("진동 안내");
-                    if (tts != null) {
-                        tts.speak("진동 안내", TextToSpeech.QUEUE_FLUSH, null, null);
-                    }
                 } else {
                     isVibrate = false;
-                    switchVibration.setText("음성 안내");
-                    if (tts != null) {
-                        tts.speak("음성 안내", TextToSpeech.QUEUE_FLUSH, null, null);
-                    }
                 }
                 editor.putBoolean("isVibrate", isVibrate);
                 editor.apply();
@@ -132,9 +105,6 @@ public class SettingActivity extends AppCompatActivity {
 
 
         findViewById(R.id.contact_button).setOnClickListener(view -> pickContact());
-        if (tts != null) {
-            tts.speak("사진 공유 상대 등록하기", TextToSpeech.QUEUE_FLUSH, null, null);
-        }
 
         contactList = new ArrayList<>();
         contactAdapter = new ContactAdapter(contactList, this);

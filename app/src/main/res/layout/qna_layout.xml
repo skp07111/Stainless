@@ -117,11 +117,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:background="#309F70"
-                android:textSize="18sp"
-                android:text="문의하기"
-                android:contentDescription="질문등록버튼"
+                android:contentDescription="문의하기"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp" />
+                android:paddingRight="16dp"
+                android:text="문의하기"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </ScrollView>
