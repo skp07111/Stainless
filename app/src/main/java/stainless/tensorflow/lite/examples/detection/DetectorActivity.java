@@ -30,12 +30,17 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.tensorflow.lite.examples.detection.R;
@@ -51,6 +56,7 @@ import stainless.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -65,10 +71,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private static final DetectorMode MODE = DetectorMode.TF_OD_API;
     private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.3f;
     private static final boolean MAINTAIN_ASPECT = true;
-    private static final Size DESIRED_PREVIEW_SIZE = new Size(640, 640);
+    private static final Size DESIRED_PREVIEW_SIZE = new Size(4032, 3024);
     private static final boolean SAVE_PREVIEW_BITMAP = false;
     private static final float TEXT_SIZE_DIP = 10;
-    OverlayView trackingOverlay;
+    private OverlayView trackingOverlay;
     private Integer sensorOrientation;
 
     private YoloV5Classifier detector;
@@ -92,7 +98,12 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private boolean isBeverage;
     private boolean isFood;
     private boolean isPen;
-
+    protected void onCreate(final Bundle savedInstanceState) {
+        LOGGER.d("onCreate " + this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tfe_od_activity_camera);
+        trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
+    }
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
         final float textSizePx =
@@ -123,14 +134,14 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
         int cropSize = detector.getInputSize();
 
-        previewWidth = size.getWidth();
-        previewHeight = size.getHeight();
+        previewWidth = 4032;
+        previewHeight = 3024;
 
         sensorOrientation = rotation - getScreenOrientation();
         LOGGER.i("Camera orientation relative to screen canvas: %d", sensorOrientation);
         Log.d("device!!", deviceString );
         LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
-        rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Config.ARGB_8888);
+        rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888);
         croppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Config.ARGB_8888);
 
         frameToCropTransform =
@@ -142,7 +153,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         cropToFrameTransform = new Matrix();
         frameToCropTransform.invert(cropToFrameTransform);
 
-        trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
         trackingOverlay.addCallback(
                 new OverlayView.DrawCallback() {
                     @Override
@@ -243,7 +253,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         LOGGER.i("Preparing image " + currTimestamp + " for detection in bg thread.");
 
         rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
-
         readyForNextImage();
 
         final Canvas canvas = new Canvas(croppedBitmap);
@@ -382,7 +391,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
     @Override
     protected int getLayoutId() {
-        return R.layout.tfe_od_camera_connection_fragment_tracking;
+        return R.layout.tfe_od_activity_camera;
     }
 
     @Override

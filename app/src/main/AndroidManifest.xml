@@ -45,6 +45,12 @@
         </activity>
 
         <activity
+            android:name="stainless.tensorflow.lite.examples.detection.CameraActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name="stainless.tensorflow.lite.examples.detection.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait">
