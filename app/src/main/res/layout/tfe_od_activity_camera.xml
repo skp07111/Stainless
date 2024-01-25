@@ -24,9 +24,10 @@
     <stainless.tensorflow.lite.examples.detection.customview.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        />
 
     <stainless.tensorflow.lite.examples.detection.customview.OverlayView
         android:id="@+id/tracking_overlay"
