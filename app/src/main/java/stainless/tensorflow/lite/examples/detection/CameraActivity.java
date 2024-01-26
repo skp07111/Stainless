@@ -101,8 +101,8 @@ public abstract class CameraActivity extends AppCompatActivity
   private static final String ASSET_PATH = "";
   SharedPreferences preferences2;
   SharedPreferences.Editor editor2;
-  protected int previewWidth = 4032;
-  protected int previewHeight = 3024;
+  protected int previewWidth = 0;
+  protected int previewHeight = 0;
   private boolean debug = false;
   protected Handler handler;
   private HandlerThread handlerThread;
@@ -181,10 +181,10 @@ public abstract class CameraActivity extends AppCompatActivity
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     LOGGER.d("onCreate " + this);
-    super.onCreate(savedInstanceState);
+    super.onCreate(null);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    setContentView(R.layout.tfe_od_activity_camera);
 
+    setContentView(R.layout.tfe_od_activity_camera);
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
     filmButton = findViewById(R.id.share_button); // 촬영 버튼
@@ -495,9 +495,36 @@ public abstract class CameraActivity extends AppCompatActivity
 
   // 이미지를 캡처하고 저장하는 메서드
   private void takePicture() {
-
+    // 카메라 이미지 캡처 로직 구현
+    if (camera != null) {
+      camera.takePicture(null, null, new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+          // 사진 데이터 파일로 저장
+          saveImageToFile(data);
+          // 카메라 미리보기 다시 시작
+//          camera.startPreview();
+        }
+      });
+    }
   }
+  private void saveImageToFile(byte[] data) {
+    File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
+    if (pictureFile == null) {
+      Log.d("Stainless", "Error creating media file, check storage permissions");
+      return;
+    }
 
+    try {
+      FileOutputStream fos = new FileOutputStream(pictureFile);
+      fos.write(data);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.d("Stainless", "File not found: " + e.getMessage());
+    } catch (IOException e) {
+      Log.d("Stainless", "Error accessing file: " + e.getMessage());
+    }
+  }
   /** 이미지를 저장할 파일 객체를 생성합니다. */
   private File getOutputMediaFile() {
     // 이미지 저장 경로 설정 (예: 외부 저장소의 디렉토리)
@@ -563,8 +590,11 @@ public abstract class CameraActivity extends AppCompatActivity
     try {
       // Initialize the storage bitmaps once when the resolution is known.
       if (rgbBytes == null) {
+        Camera.Size previewSize = camera.getParameters().getPreviewSize();
+        previewHeight = previewSize.height;
+        previewWidth = previewSize.width;
         rgbBytes = new int[previewWidth * previewHeight];
-        onPreviewSizeChosen(new Size(previewWidth, previewHeight), 90);
+        onPreviewSizeChosen(new Size(previewSize.width, previewSize.height), 90);
       }
     } catch (final Exception e) {
       LOGGER.e(e, "Exception!");
@@ -811,8 +841,13 @@ public abstract class CameraActivity extends AppCompatActivity
     if (useCamera2API) {
       CameraConnectionFragment camera2Fragment =
               CameraConnectionFragment.newInstance(
-                      (size, rotation) -> {
-                        CameraActivity.this.onPreviewSizeChosen(size, rotation);
+                      new CameraConnectionFragment.ConnectionCallback() {
+                        @Override
+                        public void onPreviewSizeChosen(final Size size, final int rotation) {
+                          previewHeight = size.getHeight();
+                          previewWidth = size.getWidth();
+                          CameraActivity.this.onPreviewSizeChosen(size, rotation);
+                        }
                       },
                       this,
                       getLayoutId(),

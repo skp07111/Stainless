@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="삭제"
+        android:contentDescription="Delete"
         android:src="@android:drawable/ic_menu_delete" />
 
 </LinearLayout>

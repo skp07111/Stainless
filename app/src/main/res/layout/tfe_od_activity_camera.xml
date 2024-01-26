@@ -21,19 +21,6 @@
     android:layout_height="match_parent"
     android:background="#00000000">
 
-    <stainless.tensorflow.lite.examples.detection.customview.AutoFitTextureView
-        android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        />
-
-    <stainless.tensorflow.lite.examples.detection.customview.OverlayView
-        android:id="@+id/tracking_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
@@ -74,7 +61,7 @@
 
             <ImageButton
                 android:id="@+id/info_button"
-                android:contentDescription="질문과 답변"
+                android:contentDescription="질문과 답변 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
@@ -90,7 +77,7 @@
 
             <ImageButton
                 android:id="@+id/share_button"
-                android:contentDescription="사진촬영"
+                android:contentDescription="사진촬영 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
@@ -106,7 +93,7 @@
 
             <ImageButton
                 android:id="@+id/setting_button"
-                android:contentDescription="설정"
+                android:contentDescription="설정 버튼"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
@@ -303,7 +290,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:contentDescription="공유하기"
         android:text="공유하기" />
 
     <!-- '취소' 버튼 -->
@@ -312,7 +298,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:contentDescription="취소"
         android:text="취소" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
