@@ -34,16 +34,20 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -51,11 +55,22 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -95,7 +110,7 @@ public class CameraConnectionFragment extends Fragment {
   private final Size inputSize;
   /** The layout identifier to inflate for this Fragment. */
   private final int layout;
-
+  private ImageButton filmButton;
   private final ConnectionCallback cameraConnectionCallback;
   private final CameraCaptureSession.CaptureCallback captureCallback =
           new CameraCaptureSession.CaptureCallback() {
@@ -285,6 +300,22 @@ public class CameraConnectionFragment extends Fragment {
   @Override
   public void onViewCreated(final View view, final Bundle savedInstanceState) {
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+    // CameraConnectionFragment 내에서 CameraActivity 참조를 얻는 방법은 다음과 같습니다.
+    CameraActivity cameraActivity = (CameraActivity) getActivity();
+    // CameraActivity의 XML에 있는 film_button을 가져오기
+    filmButton = cameraActivity.findViewById(R.id.share_button);
+
+    // 가져온 Button에 대한 작업 수행
+    filmButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // film_button을 클릭했을 때 수행할 동작 작성
+        Log.d("test","button!");
+        takePicture();
+      }
+    });
+
+
   }
 
   @Override
@@ -488,6 +519,139 @@ public class CameraConnectionFragment extends Fragment {
       LOGGER.e(e, "Exception!");
     }
   }
+  private void takePicture() {
+    if (backgroundHandler == null) {
+      // Background handler not initialized, cannot take a picture
+      Log.d("test!!", "backgroudHandler 초기화 안됨 ");
+      return;
+    }
+
+    backgroundHandler.post(new Runnable() {
+      @Override
+      public void run() {
+        // Call your capture logic here, using backgroundHandler
+        // For example:
+        captureImage();
+      }
+    });
+  }
+  protected void captureImage() {
+    if (null == cameraDevice) {
+      Log.e("cameraDevice", "mCameraDevice is null, return");
+      return;
+    }
+
+    try {
+      Size[] jpegSizes = null;
+      final Activity activity = getActivity();
+      CameraManager cameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+      CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+      StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+
+      if (map != null) {
+        jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
+//                Log.d("TEST", "map != null " + jpegSizes.length);
+      }
+      int width = 640;
+      int height = 480;
+      if (jpegSizes != null && 0 < jpegSizes.length) {
+//                for (int i = 0 ; i < jpegSizes.length; i++) {
+//                    Log.d("TEST", "getHeight = " + jpegSizes[i].getHeight() + ", getWidth = " + jpegSizes[i].getWidth());
+//                }
+        width = jpegSizes[0].getWidth();
+        height = jpegSizes[0].getHeight();
+      }
+
+      ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
+      List<Surface> outputSurfaces = new ArrayList<Surface>(2);
+      outputSurfaces.add(reader.getSurface());
+      outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
+
+      final CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+      captureBuilder.addTarget(reader.getSurface());
+//            captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+
+      captureBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
+
+      // Orientation
+      int rotation = ((Activity) activity).getWindowManager().getDefaultDisplay().getRotation();
+      captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+
+      Date date = new Date();
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+
+      final File file = new File(Environment.getExternalStorageDirectory() + "/DCIM", "pic_" + dateFormat.format(date) + ".jpg");
+
+      ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+          Image image = null;
+          try {
+            image = reader.acquireLatestImage();
+            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.capacity()];
+            buffer.get(bytes);
+            save(bytes);
+            Log.d("saveTest", "save()");
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          } finally {
+            if (image != null) {
+              image.close();
+              reader.close();
+            }
+          }
+        }
+
+        private void save(byte[] bytes) throws IOException {
+          OutputStream output = null;
+          try {
+            output = new FileOutputStream(file);
+            output.write(bytes);
+          } finally {
+            if (null != output) {
+              output.close();
+            }
+          }
+        }
+      };
+
+      reader.setOnImageAvailableListener(readerListener,backgroundHandler);
+
+      final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
+        @Override
+        public void onCaptureCompleted(CameraCaptureSession session,
+                                       CaptureRequest request, TotalCaptureResult result) {
+          super.onCaptureCompleted(session, request, result);
+          Toast.makeText(activity, "Saved:" + file, Toast.LENGTH_SHORT).show();
+//                    startPreview();
+        }
+
+      };
+
+      cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
+        @Override
+        public void onConfigured(CameraCaptureSession session) {
+          try {
+            session.capture(captureBuilder.build(), captureListener, backgroundHandler);
+          } catch (CameraAccessException e) {
+            e.printStackTrace();
+          }
+        }
+
+        @Override
+        public void onConfigureFailed(CameraCaptureSession session) {
+
+        }
+      }, backgroundHandler);
+
+    } catch (CameraAccessException e) {
+      e.printStackTrace();
+    }
+  }
+
 
   /**
    * Configures the necessary {@link Matrix} transformation to `mTextureView`. This method should be
