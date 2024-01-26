@@ -435,6 +435,15 @@ public class CameraConnectionFragment extends Fragment {
     }
   }
 
+  // 프리뷰를 재시작하는 함수
+  private void restartPreview() {
+    if (cameraDevice != null) {
+      closeCamera();  // 현재의 CameraCaptureSession을 닫음
+      openCamera(textureView.getWidth(), textureView.getHeight());
+    }
+  }
+
+
   /** Starts a background thread and its {@link Handler}. */
   private void startBackgroundThread() {
     backgroundThread = new HandlerThread("ImageListener");
@@ -634,6 +643,8 @@ public class CameraConnectionFragment extends Fragment {
             public void run() {
               // 공유하기 버튼 띄우기
               buttonContainer.setVisibility(View.VISIBLE);
+              //프리뷰 재시작
+              restartPreview();
             }
           });
 
