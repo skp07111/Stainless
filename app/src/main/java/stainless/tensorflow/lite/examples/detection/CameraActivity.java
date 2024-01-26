@@ -39,6 +39,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
 import android.speech.tts.TextToSpeech;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.util.Size;
 import android.view.GestureDetector;
@@ -67,9 +68,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.tensorflow.lite.examples.detection.R;
 
-import stainless.tensorflow.lite.examples.detection.env.ImageUtils;
-import stainless.tensorflow.lite.examples.detection.env.Logger;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -79,6 +77,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import stainless.tensorflow.lite.examples.detection.env.ImageUtils;
+import stainless.tensorflow.lite.examples.detection.env.Logger;
 
 public abstract class CameraActivity extends AppCompatActivity
         implements OnImageAvailableListener,
@@ -92,9 +93,6 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private static final int PERMISSIONS_REQUEST = 1;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-  private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-  private static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-  private static final int PERMISSION_REQUEST_SMS = 2; // 아무 정수나 사용 가능하며 중복되지 않아야 합니다.
   private static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
 
   private static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
@@ -160,6 +158,8 @@ public abstract class CameraActivity extends AppCompatActivity
   SharedPreferences preferences;
   SharedPreferences.Editor editor;
 
+  private CameraConnectionFragment cameraConnectionFragment;
+
   @Override
   public void onBackPressed() {
     if (shareTabLayout.getVisibility() == View.VISIBLE || settingsLayout.getVisibility() == View.VISIBLE) {
@@ -187,6 +187,7 @@ public abstract class CameraActivity extends AppCompatActivity
     setContentView(R.layout.tfe_od_activity_camera);
     FrameLayout previewLayout=findViewById(R.id.container);
     infoButton = findViewById(R.id.info_button);
+    filmButton = findViewById(R.id.share_button); // 촬영 버튼
     settingsButton = findViewById(R.id.setting_button);
     newShareButton = findViewById(R.id.newShareButton);
     cancelButton = findViewById(R.id.cancelButton);
@@ -242,44 +243,13 @@ public abstract class CameraActivity extends AppCompatActivity
       }
     });
 
-    // 제스처 디텍터 초기화
-    gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-      @Override
-      public boolean onDoubleTap(MotionEvent e) {
-        if (tts != null && tts.isSpeaking()) {
-          tts.stop(); // TTS가 말하고 있으면 정지
-          return true;
-        }
-        return super.onDoubleTap(e);
-      }
-    });
-
-    // 더블 탭을 감지하기 위한 터치 리스너 설정
-    View rootView = findViewById(android.R.id.content);
-    rootView.setOnTouchListener(new View.OnTouchListener() {
-      @Override
-      public boolean onTouch(View v, MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
-        return true;
-      }
-    });
-
     infoButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-//        // '사용법 안내' TTS안내 시작
-//        if (tts != null) {
-//          String toSpeak = "안녕하세요 시각장애인을 위한 얼룩탐지서비스 Stainless입니다. 지금부터 사용법 안내를 시작합니다." +
-//                  "그만 듣고 싶으시다면 화면을 빠르게 두번 누르세요.";
-//          tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-//        }
-
         // QnaActivity 시작
         Intent intent = new Intent(CameraActivity.this, QnaActivity.class);
         startActivity(intent);
-
       }
-
     });
 
     newShareButton.setOnClickListener(new View.OnClickListener() {
@@ -300,11 +270,8 @@ public abstract class CameraActivity extends AppCompatActivity
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
-        //카메라 재개
-        resumeCameraPreview();
       }
     });
-
 
     settingsButton.setOnClickListener(v -> startActivity(new Intent(CameraActivity.this, SettingActivity.class)));
 
@@ -317,8 +284,22 @@ public abstract class CameraActivity extends AppCompatActivity
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
+
+        // 최근에 저장된 사진을 가져오는 메서드 호출
+        String photoPath = getRecentPhotoPath();
+        // person1 전화번호 가져오기
+        String phoneNumber = person1_number.getText().toString();
+
+        // 가져온 사진을 함께 SMS로 보내는 메서드 호출
+        if (photoPath != null) {
+          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        } else {
+          // 최근에 저장된 사진이 없을 경우
+          Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
+        }
       }
     });
+
     person2.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -328,8 +309,22 @@ public abstract class CameraActivity extends AppCompatActivity
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
+
+        /// 최근에 저장된 사진을 가져오는 메서드 호출
+        String photoPath = getRecentPhotoPath();
+        // person1 전화번호 가져오기
+        String phoneNumber = person2_number.getText().toString();
+
+        // 가져온 사진을 함께 SMS로 보내는 메서드 호출
+        if (photoPath != null) {
+          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        } else {
+          // 최근에 저장된 사진이 없을 경우
+          Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
+        }
       }
     });
+
     person3.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -339,17 +334,23 @@ public abstract class CameraActivity extends AppCompatActivity
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
+
+        /// 최근에 저장된 사진을 가져오는 메서드 호출
+        String photoPath = getRecentPhotoPath();
+        // person1 전화번호 가져오기
+        String phoneNumber = person3_number.getText().toString();
+
+        // 가져온 사진을 함께 SMS로 보내는 메서드 호출
+        if (photoPath != null) {
+          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        } else {
+          // 최근에 저장된 사진이 없을 경우
+          Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
+        }
       }
     });
 
     settingsButton.setOnClickListener(v -> startActivity(new Intent(CameraActivity.this, SettingActivity.class)));
-
-    add_button.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        // 등록된 번호 제거기능 추가하기
-      }
-    });
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -461,78 +462,31 @@ public abstract class CameraActivity extends AppCompatActivity
     minusImageView.setOnClickListener(this);
 
   }
-  // 카메라 미리보기 일시 정지
-//  private void pauseCameraPreview() {
-//    isPreviewPaused = true;
-//  }
-  private void pauseCameraPreview() {
-    Log.d("Camera", "pauseCameraPreview() called. isProcessingFrame: " + isProcessingFrame+" isProcessingFrame: "+isPreviewPaused);
-    isProcessingFrame = true; // 프레임을 더 이상 처리하지 않도록 설정
-    isPreviewPaused = true;    // 정지 상태로 설정
-  }
-  // 카메라 미리보기 재개
-//  private void resumeCameraPreview() {
-//    isPreviewPaused = false;
-//  }
-  private void resumeCameraPreview() {
-    isProcessingFrame = false; // 프레임 처리를 다시 시작하도록 설정
-    isPreviewPaused = false;    // 정지 상태 해제
+
+  // Stainless 폴더에서 최근에 저장된 사진 경로를 얻는 코드
+  private String getRecentPhotoPath() {
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+
+    final File file = new File(Environment.getExternalStorageDirectory() + "/Stanless", "pic_" + dateFormat.format(date) + ".jpg");
+    String recentPhotoPath = file.getAbsolutePath();
+
+    return recentPhotoPath;
   }
 
-  // 이미지를 캡처하고 저장하는 메서드
-  private void takePicture() {
-    // 카메라 이미지 캡처 로직 구현
-    if (camera != null) {
-      camera.takePicture(null, null, new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-          // 사진 데이터 파일로 저장
-          saveImageToFile(data);
-          // 카메라 미리보기 다시 시작
-//          camera.startPreview();
-        }
-      });
-    }
+  // SMS로 사진을 보내는 코드
+  private void sendSmsWithPhoto(String photoPath, String message, String phoneNumber) {
+    SmsManager smsManager = SmsManager.getDefault();
+
+    // 사진 전송
+    smsManager.sendMultipartTextMessage(
+            phoneNumber,
+            null,
+            smsManager.divideMessage(message),
+            null,
+            null);
   }
-  private void saveImageToFile(byte[] data) {
-    File pictureFile = getOutputMediaFile(); // 이미지 파일을 저장할 경로
-    if (pictureFile == null) {
-      Log.d("Stainless", "Error creating media file, check storage permissions");
-      return;
-    }
 
-    try {
-      FileOutputStream fos = new FileOutputStream(pictureFile);
-      fos.write(data);
-      fos.close();
-    } catch (FileNotFoundException e) {
-      Log.d("Stainless", "File not found: " + e.getMessage());
-    } catch (IOException e) {
-      Log.d("Stainless", "Error accessing file: " + e.getMessage());
-    }
-  }
-  /** 이미지를 저장할 파일 객체를 생성합니다. */
-  private File getOutputMediaFile() {
-    // 이미지 저장 경로 설정 (예: 외부 저장소의 디렉토리)
-    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES), "Stainless");
-
-    // 디렉토리가 없다면 생성합니다.
-    if (!mediaStorageDir.exists()) {
-      if (!mediaStorageDir.mkdirs()) {
-        Log.d("Stainless", "failed to create directory");
-        return null;
-      }
-    }
-
-    // 이미지 파일 이름 생성
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    File mediaFile;
-    mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "IMG_" + timeStamp + ".jpg");
-
-    return mediaFile;
-  }
   protected ArrayList<String> getModelStrings(AssetManager mgr, String path){
     ArrayList<String> res = new ArrayList<String>();
     try {
@@ -613,6 +567,12 @@ public abstract class CameraActivity extends AppCompatActivity
   /** Callback for Camera2 API */
   @Override
   public void onImageAvailable(final ImageReader reader) {
+
+    // rgbBytes 배열 초기화
+    if (rgbBytes == null || rgbBytes.length != previewWidth * previewHeight) {
+      rgbBytes = new int[previewWidth * previewHeight];
+    }
+
     // We need wait until we have some size from onPreviewSizeChosen
     if (previewWidth == 0 || previewHeight == 0) {
       return;
@@ -737,7 +697,8 @@ public abstract class CameraActivity extends AppCompatActivity
     if (requestCode == PERMISSIONS_REQUEST) {
       if (allPermissionsGranted(grantResults)) {
         setFragment();
-      } else {
+      }
+      else {
         requestPermission();
       }
     }
@@ -754,7 +715,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private boolean hasPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED;
+      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED&&
+              checkSelfPermission(PERMISSION_SMS) == PackageManager.PERMISSION_GRANTED;
     } else {
       return true;
     }
@@ -762,14 +724,15 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private void requestPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
+      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)||
+              shouldShowRequestPermissionRationale(PERMISSION_SMS)) {
         Toast.makeText(
                         CameraActivity.this,
                         "Camera permission is required for this demo",
                         Toast.LENGTH_LONG)
                 .show();
       }
-      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_READ_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSION_SMS}, PERMISSIONS_REQUEST);
+      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS}, PERMISSIONS_REQUEST);
     }
   }
 
