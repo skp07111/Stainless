@@ -580,7 +580,7 @@ public class CameraConnectionFragment extends Fragment {
       Date date = new Date();
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
 
-      final File file = new File(Environment.getExternalStorageDirectory() + "/DCIM", "pic_" + dateFormat.format(date) + ".jpg");
+      final File file = new File(Environment.getExternalStorageDirectory() + "/Stanless", "pic_" + dateFormat.format(date) + ".jpg");
 
       ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
         @Override
