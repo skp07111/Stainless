@@ -57,6 +57,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -111,6 +112,7 @@ public class CameraConnectionFragment extends Fragment {
   /** The layout identifier to inflate for this Fragment. */
   private final int layout;
   private ImageButton filmButton;
+  private LinearLayout buttonContainer;
   private final ConnectionCallback cameraConnectionCallback;
   private final CameraCaptureSession.CaptureCallback captureCallback =
           new CameraCaptureSession.CaptureCallback() {
@@ -304,6 +306,7 @@ public class CameraConnectionFragment extends Fragment {
     CameraActivity cameraActivity = (CameraActivity) getActivity();
     // CameraActivity의 XML에 있는 film_button을 가져오기
     filmButton = cameraActivity.findViewById(R.id.share_button);
+    buttonContainer = cameraActivity.findViewById(R.id.buttonContainer);
 
     // 가져온 Button에 대한 작업 수행
     filmButton.setOnClickListener(new View.OnClickListener() {
@@ -625,10 +628,16 @@ public class CameraConnectionFragment extends Fragment {
         public void onCaptureCompleted(CameraCaptureSession session,
                                        CaptureRequest request, TotalCaptureResult result) {
           super.onCaptureCompleted(session, request, result);
-          Toast.makeText(activity, "Saved:" + file, Toast.LENGTH_SHORT).show();
-//                    startPreview();
-        }
+          Toast.makeText(activity, "사진이 저장되었습니다.", Toast.LENGTH_SHORT).show();
+          activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              // 공유하기 버튼 띄우기
+              buttonContainer.setVisibility(View.VISIBLE);
+            }
+          });
 
+        }
       };
 
       cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
