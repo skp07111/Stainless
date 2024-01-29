@@ -88,6 +88,12 @@ public class SettingActivity extends AppCompatActivity {
 
         switchVibration = findViewById(R.id.switch_vibration);
 
+        if (isVibrate == true) {
+            switchVibration.setChecked(true);
+        } else {
+            switchVibration.setChecked(false);
+        }
+
         switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
