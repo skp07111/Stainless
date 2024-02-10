@@ -133,7 +133,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    // 예제: 연락처 정보를 저장하는 코드
+    // 연락처 정보를 저장하는 코드
     private void displayContactDetails(Uri contactUri) {
         ContentResolver contentResolver = getContentResolver();
         Cursor cursor = contentResolver.query(contactUri, null, null, null, null);
@@ -156,6 +156,14 @@ public class SettingActivity extends AppCompatActivity {
             if (phoneCursor != null && phoneCursor.moveToFirst()) {
                 @SuppressLint("Range") String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 Log.d("ContactDetails", "Phone Number: " + phoneNumber);
+
+                // 중복 체크
+                for (ContactModel contact : contactList) {
+                    if (contact.getName().equals(displayName) && contact.getPhoneNumber().equals(phoneNumber)) {
+                        Toast.makeText(this, "이미 등록된 연락처입니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
                 if (contactList.size() < 3) {
                     // RecyclerView에 연락처 추가
