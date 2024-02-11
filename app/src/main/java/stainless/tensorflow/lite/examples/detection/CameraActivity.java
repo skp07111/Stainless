@@ -32,6 +32,7 @@ import android.media.Image;
 import android.media.Image.Plane;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -63,18 +64,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import org.tensorflow.lite.examples.detection.BuildConfig;
 import org.tensorflow.lite.examples.detection.R;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -94,8 +100,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private static final int PERMISSIONS_REQUEST = 1;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
-
-  private static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
+//  private static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
   private static final String ASSET_PATH = "";
   SharedPreferences preferences2;
   SharedPreferences.Editor editor2;
@@ -279,20 +284,20 @@ public abstract class CameraActivity extends AppCompatActivity
       @Override
       public void onClick(View v) {
         // 토스트 메시지 표시
-        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
         LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
 
         // 최근에 저장된 사진을 가져오는 메서드 호출
-        String photoPath = getRecentPhotoPath();
+        String recentphotoPath = getRecentPhotoPath();
         // person1 전화번호 가져오기
         String phoneNumber = person1_number.getText().toString();
 
         // 가져온 사진을 함께 SMS로 보내는 메서드 호출
-        if (photoPath != null) {
-          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        if (recentphotoPath != null) {
+          sendMmsWithPhoto(recentphotoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
         } else {
           // 최근에 저장된 사진이 없을 경우
           Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
@@ -304,20 +309,20 @@ public abstract class CameraActivity extends AppCompatActivity
       @Override
       public void onClick(View v) {
         // 토스트 메시지 표시
-        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
         LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
 
         /// 최근에 저장된 사진을 가져오는 메서드 호출
-        String photoPath = getRecentPhotoPath();
+        String recentphotoPath = getRecentPhotoPath();
         // person1 전화번호 가져오기
         String phoneNumber = person2_number.getText().toString();
 
         // 가져온 사진을 함께 SMS로 보내는 메서드 호출
-        if (photoPath != null) {
-          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        if (recentphotoPath != null) {
+          sendMmsWithPhoto(recentphotoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
         } else {
           // 최근에 저장된 사진이 없을 경우
           Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
@@ -329,20 +334,20 @@ public abstract class CameraActivity extends AppCompatActivity
       @Override
       public void onClick(View v) {
         // 토스트 메시지 표시
-        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "메세지를 보냈습니다", Toast.LENGTH_SHORT).show();
         LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
         buttonContainer.setVisibility(View.GONE);
         bottomTabLayout.setVisibility(View.VISIBLE);
         shareTabLayout.setVisibility(View.GONE);
 
         /// 최근에 저장된 사진을 가져오는 메서드 호출
-        String photoPath = getRecentPhotoPath();
+        String recentphotoPath = getRecentPhotoPath();
         // person1 전화번호 가져오기
         String phoneNumber = person3_number.getText().toString();
 
         // 가져온 사진을 함께 SMS로 보내는 메서드 호출
-        if (photoPath != null) {
-          sendSmsWithPhoto(photoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
+        if (recentphotoPath != null) {
+          sendMmsWithPhoto(recentphotoPath, "어떤 얼룩인지 알려주세요.", phoneNumber);
         } else {
           // 최근에 저장된 사진이 없을 경우
           Toast.makeText(getApplicationContext(), "No recent photo found", Toast.LENGTH_SHORT).show();
@@ -463,28 +468,54 @@ public abstract class CameraActivity extends AppCompatActivity
 
   }
 
-  // Stainless 폴더에서 최근에 저장된 사진 경로를 얻는 코드
+  // DCIM 폴더에서 가장 최근에 저장된 사진 경로를 얻는 코드
   private String getRecentPhotoPath() {
-    Date date = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+    String recentPhotoPath = null;
+    String dcimPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+    File dcimDirectory = new File(dcimPath);
 
-    final File file = new File(Environment.getExternalStorageDirectory() + "/Stanless", "pic_" + dateFormat.format(date) + ".jpg");
-    String recentPhotoPath = file.getAbsolutePath();
+    // DCIM 폴더 내의 사진 중 최신 사진 찾기
+    if (dcimDirectory.exists() && dcimDirectory.isDirectory()) {
+      File[] files = dcimDirectory.listFiles(new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+          return file.isFile() && file.getName().toLowerCase().endsWith(".jpg");
+        }
+      });
 
+      if (files != null && files.length > 0) {
+        // 최신 사진을 찾음
+        Arrays.sort(files, new Comparator<File>() {
+          @Override
+          public int compare(File file1, File file2) {
+            return Long.compare(file2.lastModified(), file1.lastModified());
+          }
+        });
+        recentPhotoPath = files[0].getAbsolutePath();
+      }
+    }
+  // recentphotoPath 변수를 로그로 출력
+    Log.d("recentPhotoPath", "사진경로: " + recentPhotoPath);
     return recentPhotoPath;
   }
 
-  // SMS로 사진을 보내는 코드
-  private void sendSmsWithPhoto(String photoPath, String message, String phoneNumber) {
-    SmsManager smsManager = SmsManager.getDefault();
+  // MMS로 사진과 메세지를 보내는 코드
+  private void sendMmsWithPhoto(String recentphotoPath, String message, String phoneNumber) {
+    // 문자 전송
+    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+    sendIntent.putExtra("sms_body", message);
+    sendIntent.putExtra("address", phoneNumber);
+    sendIntent.setType("image/jpg");
 
-    // 사진 전송
-    smsManager.sendMultipartTextMessage(
-            phoneNumber,
-            null,
-            smsManager.divideMessage(message),
-            null,
-            null);
+    // FileProvider를 사용하여 파일의 Uri를 가져옴
+    Uri photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(recentphotoPath));
+    sendIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+    // sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(recentphotoPath)));
+
+    // 권한을 부여하여 다른 앱과 파일을 공유할 수 있도록 함
+    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+    startActivity(sendIntent);
   }
 
   protected ArrayList<String> getModelStrings(AssetManager mgr, String path){
@@ -717,6 +748,7 @@ public abstract class CameraActivity extends AppCompatActivity
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED&&
               checkSelfPermission(PERMISSION_SMS) == PackageManager.PERMISSION_GRANTED;
+//              checkSelfPermission(PERMISSION_WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED;
     } else {
       return true;
     }
@@ -725,14 +757,18 @@ public abstract class CameraActivity extends AppCompatActivity
   private void requestPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)||
-              shouldShowRequestPermissionRationale(PERMISSION_SMS)) {
+              shouldShowRequestPermissionRationale(PERMISSION_SMS))
+//              shouldShowRequestPermissionRationale(PERMISSION_WRITE_EXTERNAL_STORAGE))
+      {
         Toast.makeText(
                         CameraActivity.this,
-                        "Camera permission is required for this demo",
+                        "These permissions are required for this demo",
                         Toast.LENGTH_LONG)
                 .show();
       }
+//      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS, PERMISSION_WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
       requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS}, PERMISSIONS_REQUEST);
+
     }
   }
 

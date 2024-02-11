@@ -50,6 +50,7 @@ project.ext.TMP_DIR = project.buildDir.toString() + '/downloads'
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 //    implementation files('bin/gdbserver')
+    implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
