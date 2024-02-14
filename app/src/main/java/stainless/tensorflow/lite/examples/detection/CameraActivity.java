@@ -99,8 +99,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private static final int PERMISSIONS_REQUEST = 1;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-  private static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
-//  private static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+//  private static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
   private static final String ASSET_PATH = "";
   SharedPreferences preferences2;
   SharedPreferences.Editor editor2;
@@ -746,9 +745,9 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private boolean hasPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED&&
-              checkSelfPermission(PERMISSION_SMS) == PackageManager.PERMISSION_GRANTED;
-//              checkSelfPermission(PERMISSION_WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED;
+      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED;
+//              &&
+//              checkSelfPermission(PERMISSION_SMS) == PackageManager.PERMISSION_GRANTED;
     } else {
       return true;
     }
@@ -756,9 +755,9 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private void requestPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)||
-              shouldShowRequestPermissionRationale(PERMISSION_SMS))
-//              shouldShowRequestPermissionRationale(PERMISSION_WRITE_EXTERNAL_STORAGE))
+      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA))
+//              ||
+//              shouldShowRequestPermissionRationale(PERMISSION_SMS))
       {
         Toast.makeText(
                         CameraActivity.this,
@@ -766,8 +765,8 @@ public abstract class CameraActivity extends AppCompatActivity
                         Toast.LENGTH_LONG)
                 .show();
       }
-//      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS, PERMISSION_WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST);
-      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS}, PERMISSIONS_REQUEST);
+//      requestPermissions(new String[]{PERMISSION_CAMERA, PERMISSION_SMS}, PERMISSIONS_REQUEST);
+      requestPermissions(new String[]{PERMISSION_CAMERA}, PERMISSIONS_REQUEST);
 
     }
   }
